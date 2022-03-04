@@ -8,15 +8,13 @@ export const StyledSide= styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   margin: 10px 0;
   padding: 20px;
-  height: 500px;
+  height: 800px;
   width: 30%;
   flex-direction: row;
 
  
 
-  & > div {
-    flex: 1;
-  }
+ 
 
   @media (max-width: ${({ theme }) => theme.mobile}) {
     flex-direction: column;
