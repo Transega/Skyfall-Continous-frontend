@@ -14,25 +14,25 @@ export default function Calendar() {
   return(
     <Wrapper>
     
-    <DatePicker
-      selected={startDate}
-      selectsStart
-      startDate={startDate}
-      placeholderText="Start Date"
-      endDate={endDate}
-      onChange={date => setStartDate(date)}
-    />
-    <DatePicker
-      selected={endDate}
-      selectsEnd
-      startDate={startDate}
-      placeholderText="End Date"
-      endDate={endDate}
-      minDate={startDate}
-      onChange={date => setEndDate(date)}
-    />
+      <DatePicker
+        selected={startDate}
+        selectsStart
+        startDate={startDate} 
+        placeholderText="Start Date"
+        endDate={endDate}
+        onChange={date => setStartDate(date)}
+      />
+      <DatePicker
+        selected={endDate}
+        selectsEnd
+        startDate={startDate}
+        placeholderText="End Date"
+        endDate={endDate}
+        minDate={startDate}
+        onChange={date => setEndDate(date)}
+      />
 
-  </Wrapper>
+    </Wrapper>
   )
    
 }

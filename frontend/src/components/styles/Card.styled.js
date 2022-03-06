@@ -9,7 +9,7 @@ export const StyledCard = styled.div`
   margin: 10px 0;
   padding: 20px;
   height: 800px;
-  flex-basis: 100px;
+  width: 70%;
   flex-direction: ${({ layout }) => layout || 'row'};
 
   img {

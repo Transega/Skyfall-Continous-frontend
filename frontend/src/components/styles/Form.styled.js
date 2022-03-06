@@ -41,16 +41,12 @@ export const Select = styled.select`
        }
 `;
 
-const StyledInput = styled.input`
-  display: block;
-  width: 100%;
-  
-`;
+
 
 
 export const StyledButton = styled.button`
   display: block;
-  background-color: #f7797d;
+  background-color: #50C878;
   color: #fff;
   font-size: 0.9rem;
   border: 0;
