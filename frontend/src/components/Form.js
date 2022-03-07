@@ -7,6 +7,15 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {useForm}   from 'react-hook-form';
 
 function Form(){
+   const adm0Array = ["Kenya", "Nigeria", "Ghana"]
+
+   const options = adm0Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
 
    
 
@@ -24,11 +33,12 @@ function Form(){
   return (
     <StyledFormWrapper>
         <Container>
-        <StyledForm onSubmit ={handleSubmit(onSubmit)}> 
+        <StyledForm> 
             <Select {...register('Adm0')}>
-              
-               <option defaultValue="Kenya">Kenya</option>
-               <option value="Nigeria">Nigeria</option>
+            <option value="" hidden>Adm0</option>
+               <option value={options}>{options.value}</option>
+               console.log({options})
+
                
             </Select>
             <Select {...register('Adm1')}>
