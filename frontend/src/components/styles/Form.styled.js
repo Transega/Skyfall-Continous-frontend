@@ -2,16 +2,17 @@ import styled from "styled-components";
 
 export const StyledFormWrapper = styled.div`
   display: flex;
+  height: 80px;
   justify-content: center;
   align-items: center;
-  height: 20px;
+  
   padding: 0 20px;
 `;
 
 export const StyledForm = styled.form`
 display:flex;
   width: 100%;
-  
+  height: 70px;
   max-width: 700px;
   padding: 20px;
   background-color: #fff;
@@ -22,7 +23,7 @@ display:flex;
 
 export const Select = styled.select`
   width: 100%;
-  height:35px;
+  
   background: white;
   color: gray;
   padding-left: 5px;
@@ -45,7 +46,7 @@ export const Select = styled.select`
 
 
 export const StyledButton = styled.button`
-  display: block;
+
   background-color: #50C878;
   color: #fff;
   font-size: 0.9rem;
@@ -57,3 +58,9 @@ export const StyledButton = styled.button`
   box-sizing: border-box;
 `;
 
+export const Date =  styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+`

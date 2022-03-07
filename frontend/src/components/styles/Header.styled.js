@@ -34,26 +34,7 @@ export const Image = styled.img`
   }
 `
 
-export const StyledLinks = styled.link`
-color: red;
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-`
 
-export const Ul = styled.ul`
-list-style:none;
-display: flex;
-justify-content: space-around;
-
-li{
-  margin: 0px 7px;
-}
-`
 
 export const StyledUl = styled.ul`
     list-style-type: none;
@@ -64,45 +45,12 @@ export const StyledUl = styled.ul`
     background-color: lightblue;
     color: black;
     font-weight: bold;
-`;
 
-export const StyledLi = styled.li`
-    float: left;
-    height: 100%;
-    padding: 10px;
-    border-radius:10px;
-    &:hover {
-        background-color:green;
+    h1{
+      height: 30px;
     }
 `;
 
-export const DropDownContent = styled.div`
-    display: none;
-    position: absolute;
-    min-width: 160px;
-    z-index: 1;
-`;
-
-export const DropDownLi = styled(StyledLi)`
-    display: inline-block;
-    &:hover ${DropDownContent} {
-        display: block;
-    }
-`;
-
-export const StyledA = styled.a`
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-`;
-
-export const SubA = styled(StyledA)`
-    text-decoration: none;
-    display: block;
-    text-align: left;
-    background-color: lightblue;
-    padding: 10px;
-`;
 
 
 
