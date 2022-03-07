@@ -7,15 +7,25 @@ import Calendar from './Calendar';
 import { Flex } from './styles/Flex.styled';
 
 function Form(){
+   const adm0Array = ["Kenya", "Nigeria", "Ghana"]
+
+   const options = adm0Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
 
   return (
     <StyledFormWrapper>
         <Container>
         <StyledForm> 
             <Select>
-               <option value="" hidden>Adm0</option>
-               <option value="1">Kenya</option>
-               <option value="2">Nigeria</option>
+            <option value="" hidden>Adm0</option>
+               <option value={options}>{options.value}</option>
+               console.log({options})
+
                
             </Select>
             <Select>
