@@ -65,9 +65,13 @@ const Form = ({adm0Array}) => {
  const onAdm1Chnage = (e) => {
       setAdm1(e.target.value)
       console.log(Adm1, 'admi1 selected..')
-      // const subcountyList = getDatasets(adm2Namesurl+Adm1)
-      // setadm2Array(subcountyList['sub_counties'])
-      
+     
+      const getSubcountyList = async () => {
+         const subcountyList = await getDatasets(adm2Namesurl+Adm1)
+         setadm2Array(subcountyList['sub_counties'][0])
+      }
+
+      getSubcountyList()
 
     }
 
@@ -84,12 +88,13 @@ const Form = ({adm0Array}) => {
 
 // Use effect to update list of counties 
 
-// const getDatasets = function (url){
-//    const datafromserver =  fetchData(url)
-//    console.log(datafromserver)
+const getDatasets = async (url) =>{
+   const datafromserver = await fetchData(url)
+   console.log(datafromserver)
+   const data = await datafromserver.json()
    
-// return datafromserver
-//   }
+return data
+  }
 
 useEffect(()=> {
    const getAdm1 = async () => {
@@ -149,15 +154,22 @@ useEffect(()=> {
 
        <Select {...register('Adm2')}>
           
-          <option defaultValue="1">1</option>
+          <option defaultValue="1">Adm2</option>
           <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
           console.log({optionsAdm2})
           
        </Select>
        <Date>
+       <Select {...register('Adm3')} className='Adm3'>
+          
+          <option defaultValue="ADM3">Adm3</option>
+          <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
+          console.log({optionsAdm2})
+          
+       </Select>
        
        
-       <StyledButton type="submit">Geometry</StyledButton>
+       {/* <StyledButton type="submit">Geometry</StyledButton> */}
        </Date>
     </StyledForm>
 
