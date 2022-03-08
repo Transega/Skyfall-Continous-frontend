@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Select, StyledFormWrapper,StyledButton, StyledForm,Date} from './styles/Form.styled'
 
 import { Container } from './styles/Container.styled'
@@ -16,7 +16,7 @@ const Form = ({adm0Array}) => {
          </option>
       )
    })
-   const adm1Array = ['Kakmega', 'Kisumu']
+   const [adm1Array, setadm1Array] = useState([])
    const optionsAdm1 = adm1Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -39,21 +39,47 @@ const Form = ({adm0Array}) => {
    const onSubmit2= (data)=>{
       console.log(data);
    }
+
+   const onAdm0Chnage = (e) => {
+      setAdm0(e.target.value)
+      console.log(Adm0, 'adm0..')
+    }
+
+// Use effect to update list of counties 
+
+useEffect(()=> {
+   const getAdm1 = async () => {
+     const Adm1fromsever = await fetchAdm1()
+     setadm1Array(Adm1fromsever['counties'])
+   }
+
+    getAdm1()
+  }, [])
+
+      // fetch data  from server 
+  const fetchAdm1 = async () => {
+   const res = await fetch('http://149.28.234.94:8080/countiesFacilities/get_adm1_shapefile/?county_names=ALL')
+   const data = await res.json()
+   
+   return data  
+ }
+      
   return (
    <StyledFormWrapper>
    <Container>
    <StyledForm> 
-       <Select {...register('Adm0')}>
-          {/* <h3>Country</h3> */}
+       <Select {...register('Adm0')} 
+       onChange={onAdm0Chnage}>
        <option value="" hidden>Adm0</option>
-          <option value={options}>{options.value}</option>
+          <option value={options}>{options.value} 
+          </option>
           console.log({options})
 
           
        </Select>
        <Select {...register('Adm1')}>
           
-          <option defaultValue="Adm1">1</option>
+          <option defaultValue="Adm1">Adm1</option>
           <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
           console.log({optionsAdm1})
           
