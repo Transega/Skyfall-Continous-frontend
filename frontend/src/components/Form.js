@@ -67,7 +67,7 @@ const Form = ({adm0Array}) => {
       console.log(Adm1, 'admi1 selected..')
      
       const getSubcountyList = async () => {
-         const subcountyList = await getDatasets(adm2Namesurl+Adm1)
+         const subcountyList = await fetchData(adm2Namesurl+Adm1)
          setadm2Array(subcountyList['sub_counties'][0])
       }
 
@@ -88,13 +88,13 @@ const Form = ({adm0Array}) => {
 
 // Use effect to update list of counties 
 
-const getDatasets = async (url) =>{
-   const datafromserver = await fetchData(url)
-   console.log(datafromserver)
-   const data = await datafromserver.json()
+// const getDatasets = async (url) =>{
+//    const datafromserver = await fetchData(url)
+//    console.log(datafromserver)
+//    const data = await datafromserver.json()
    
-return data
-  }
+// return data
+//   }
 
 useEffect(()=> {
    const getAdm1 = async () => {
