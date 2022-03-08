@@ -2,7 +2,10 @@ import { StyledHeader, StyledUl, Nav, Logo} from './styles/Header.styled'
 import { Container } from './styles/Container.styled'
 import Form from './Form'
 
-export default function Header() {
+
+import React from 'react'
+
+const Header = ({adm0Array}) => {
   return (
     <StyledHeader>
       <Container>
@@ -10,7 +13,7 @@ export default function Header() {
             
           <Logo src='./images/logo.png' alt='' />
           <StyledUl>
-                <Form/> 
+                <Form adm0Array={adm0Array}/> 
           </StyledUl>
           
         </Nav>
@@ -18,3 +21,11 @@ export default function Header() {
     </StyledHeader>
   )
 }
+
+export default Header
+
+// export default function () {
+//   return (
+    
+//   )
+// }

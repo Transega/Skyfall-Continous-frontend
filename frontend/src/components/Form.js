@@ -6,10 +6,18 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import {useForm}   from 'react-hook-form';
 
-function Form(){
-   const adm0Array = ["Kenya", "Nigeria", "Ghana"]
+// import React from 'react'
 
+const Form = ({adm0Array}) => {
    const options = adm0Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
+   const adm1Array = ['Kakmega', 'Kisumu']
+   const optionsAdm1 = adm1Array.map((item) => {
       return (
          <option key={item} value={item}> 
          {item}
@@ -22,6 +30,7 @@ function Form(){
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('2020-03-12');
    const [EndDate, setEndDate] = useState('2020-03-12');
+   const [Adm0, setAdm0] = useState('')
 
 
    const onSubmit= (data)=>{
@@ -31,73 +40,74 @@ function Form(){
       console.log(data);
    }
   return (
-    <StyledFormWrapper>
-        <Container>
-        <StyledForm> 
-            <Select {...register('Adm0')}>
-            <option value="" hidden>Adm0</option>
-               <option value={options}>{options.value}</option>
-               console.log({options})
+   <StyledFormWrapper>
+   <Container>
+   <StyledForm> 
+       <Select {...register('Adm0')}>
+          {/* <h3>Country</h3> */}
+       <option value="" hidden>Adm0</option>
+          <option value={options}>{options.value}</option>
+          console.log({options})
 
-               
-            </Select>
-            <Select {...register('Adm1')}>
-               
-               <option defaultValue="1">1</option>
-               <option value="2">2</option>
-               <option value="3">3</option>
-               
-            </Select>
+          
+       </Select>
+       <Select {...register('Adm1')}>
+          
+          <option defaultValue="Adm1">1</option>
+          <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
+          console.log({optionsAdm1})
+          
+       </Select>
 
-            <Select {...register('Adm2')}>
-               
-               <option defaultValue="1">1</option>
-               <option value="2">2</option>
-               
-            </Select>
-            <Date>
-            
-            
-            <StyledButton type="submit">Geometry</StyledButton>
-            </Date>
-         </StyledForm>
+       <Select {...register('Adm2')}>
+          
+          <option defaultValue="1">1</option>
+          <option value="2">2</option>
+          
+       </Select>
+       <Date>
+       
+       
+       <StyledButton type="submit">Geometry</StyledButton>
+       </Date>
+    </StyledForm>
 
-        </Container>
+   </Container>
 
-        <Container>
-         <StyledForm onSubmit ={handleSubmit(onSubmit2)}>
+   <Container>
+    <StyledForm onSubmit ={handleSubmit(onSubmit2)}>
 
-            <Select {...register('Platform')}>
-               <option defaultValue="" hidden>Plaform</option>
-               <option value="Sentinel">Sentinel</option>
-               <option value="Landsat">Landsat</option>
+       <Select {...register('Platform')}>
+          <option defaultValue="" hidden>Plaform</option>
+          <option value="Sentinel">Sentinel</option>
+          <option value="Landsat">Landsat</option>
+ 
+       </Select>
+       <Select {...register('Sensor')}>
+          <option defaultValue="" hidden>Sensor</option>
+          <option value="Sentinel-1">Sentinel-1</option>
+          <option value="Sentinel-2">Sentinel-2</option>
+          <option value="Landsat-8">Landsat-8</option>
+          
+       </Select>
+
+       <Select {...register('Product')}>
+          <option defaultValue="" hidden>Product</option>
+          <option value="NDVI">NDVI</option>
+          <option value="NDMI">NDMI</option>
+          
+       </Select>
       
-            </Select>
-            <Select {...register('Sensor')}>
-               <option defaultValue="" hidden>Sensor</option>
-               <option value="Sentinel-1">Sentinel-1</option>
-               <option value="Sentinel-2">Sentinel-2</option>
-               <option value="Landsat-8">Landsat-8</option>
-               
-            </Select>
-
-            <Select {...register('Product')}>
-               <option defaultValue="" hidden>Product</option>
-               <option value="NDVI">NDVI</option>
-               <option value="NDMI">NDMI</option>
-               
-            </Select>
-           
-            <Date>
-            
-            <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
-            <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
-            <StyledButton type="submit">Compute</StyledButton>
-            </Date>
-         </StyledForm>
-      
-        </Container>
-      </StyledFormWrapper>
+       <Date>
+       
+       <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
+       <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
+       <StyledButton type="submit">Compute</StyledButton>
+       </Date>
+    </StyledForm>
+ 
+   </Container>
+ </StyledFormWrapper>
   )
 }
 

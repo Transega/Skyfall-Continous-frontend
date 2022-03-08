@@ -7,6 +7,7 @@ import { Container } from './components/styles/Container.styled'
 import { Flex } from './components/styles/Flex.styled'
 import GlobalStyles from './components/styles/Global'
 import content from './content'
+import React,{useState} from 'react'
 
 const theme = {
   colors: {
@@ -18,11 +19,12 @@ const theme = {
 }
 
 function App() {
+  const [adm0Array,setadm0Array] = useState(["Kenya", "Nigeria", "Ghana"])
   return (
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyles />
-        <Header />
+        <Header adm0Array={adm0Array}/>
         <Container>
           <Flex>
         <SideBarMenu/>
