@@ -10,6 +10,7 @@ import {useForm}   from 'react-hook-form';
 //  urls 
 const baseurlshp = 'http://149.28.234.94:8080'
 const adm2Namesurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_sub_counties_names='
+const adm3Namesurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?Get_sub_counties_names='
 
 const Form = ({adm0Array}) => {
    const options = adm0Array.map((item) => {
@@ -22,8 +23,9 @@ const Form = ({adm0Array}) => {
    // set lists for admin levels selection and update using useState
    const [adm1Array, setadm1Array] = useState([])
    const [adm2Array, setadm2Array] = useState([])
+   const [adm3Array, setadm3Array] = useState([])
 
-
+// Iterate over the array for admn level names 
    const optionsAdm1 = adm1Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -40,12 +42,21 @@ const Form = ({adm0Array}) => {
       )
    })
 
+   const optionsAdm3 = adm3Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
+
 
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('2020-03-12');
    const [EndDate, setEndDate] = useState('2020-03-12');
    const [Adm0, setAdm0] = useState('')
    const [Adm1, setAdm1] = useState('Baringo')
+   const [Adm2, setAdm2] = useState('Mogotio')
 
 
    const onSubmit= (data)=>{
@@ -74,6 +85,18 @@ const Form = ({adm0Array}) => {
       getSubcountyList()
 
     }
+// adm2 changes 
+    const onAdm2Chnage = (e) => {
+       setAdm2(e.target.value)
+       console.log('adm2 changed to ', Adm2)
+
+      const getWardList = async () => {
+         const wardsList = await fetchData(adm3Namesurl+Adm2)
+         setadm3Array(wardsList['Wards'])
+      }
+getWardList()
+
+    }
 
     useEffect(()=> {
       const getAdm2 = async () => {
@@ -86,16 +109,17 @@ const Form = ({adm0Array}) => {
 
 
 
+// adm 3  use effect 
+useEffect(()=> {
+   const getAdm3 = async () => {
+     const wardsList = await fetchData(adm3Namesurl+Adm2)
+     setadm3Array(wardsList['Wards'])
+   }
+
+   getAdm3()
+  }, [])
+
 // Use effect to update list of counties 
-
-// const getDatasets = async (url) =>{
-//    const datafromserver = await fetchData(url)
-//    console.log(datafromserver)
-//    const data = await datafromserver.json()
-   
-// return data
-//   }
-
 useEffect(()=> {
    const getAdm1 = async () => {
      const Adm1fromsever = await fetchAdm1()
@@ -152,7 +176,7 @@ useEffect(()=> {
           
        </Select>
 
-       <Select {...register('Adm2')}>
+       <Select {...register('Adm2')} onChange={onAdm2Chnage}>
           
           <option defaultValue="1">Adm2</option>
           <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
@@ -163,8 +187,8 @@ useEffect(()=> {
        <Select {...register('Adm3')} className='Adm3'>
           
           <option defaultValue="ADM3">Adm3</option>
-          <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
-          console.log({optionsAdm2})
+          <option value={optionsAdm3.value}>{optionsAdm3.value}</option>
+          console.log({optionsAdm3})
           
        </Select>
        
