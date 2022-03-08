@@ -7,6 +7,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {useForm}   from 'react-hook-form';
 
 // import React from 'react'
+//  urls 
+const baseurlshp = 'http://149.28.234.94:8080'
+const adm2Namesurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_sub_counties_names='
 
 const Form = ({adm0Array}) => {
    const options = adm0Array.map((item) => {
@@ -16,7 +19,11 @@ const Form = ({adm0Array}) => {
          </option>
       )
    })
+   // set lists for admin levels selection and update using useState
    const [adm1Array, setadm1Array] = useState([])
+   const [adm2Array, setadm2Array] = useState([])
+
+
    const optionsAdm1 = adm1Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -25,12 +32,20 @@ const Form = ({adm0Array}) => {
       )
    })
 
-   
+   const optionsAdm2 = adm2Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
+
 
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('2020-03-12');
    const [EndDate, setEndDate] = useState('2020-03-12');
    const [Adm0, setAdm0] = useState('')
+   const [Adm1, setAdm1] = useState('Baringo')
 
 
    const onSubmit= (data)=>{
@@ -39,13 +54,42 @@ const Form = ({adm0Array}) => {
    const onSubmit2= (data)=>{
       console.log(data);
    }
-
+// track chnages for user selection on Adm0
    const onAdm0Chnage = (e) => {
       setAdm0(e.target.value)
       console.log(Adm0, 'adm0..')
     }
 
+   // track chnages for user selection on Adm1 and perform some tasks
+
+ const onAdm1Chnage = (e) => {
+      setAdm1(e.target.value)
+      console.log(Adm1, 'admi1 selected..')
+      // const subcountyList = getDatasets(adm2Namesurl+Adm1)
+      // setadm2Array(subcountyList['sub_counties'])
+      
+
+    }
+
+    useEffect(()=> {
+      const getAdm2 = async () => {
+        const subcountyList = await fetchData(adm2Namesurl+Adm1)
+        setadm2Array(subcountyList['sub_counties'][0])
+      }
+   
+       getAdm2()
+     }, [])
+
+
+
 // Use effect to update list of counties 
+
+// const getDatasets = function (url){
+//    const datafromserver =  fetchData(url)
+//    console.log(datafromserver)
+   
+// return datafromserver
+//   }
 
 useEffect(()=> {
    const getAdm1 = async () => {
@@ -56,12 +100,30 @@ useEffect(()=> {
     getAdm1()
   }, [])
 
+  // use effect to fetch other datasets from server 
+
+  
+
       // fetch data  from server 
+      // admin 1
   const fetchAdm1 = async () => {
-   const res = await fetch('http://149.28.234.94:8080/countiesFacilities/get_adm1_shapefile/?county_names=ALL')
+   const res = await fetch(baseurlshp+'/countiesFacilities/get_adm1_shapefile/?county_names=ALL')
    const data = await res.json()
    
+   
    return data  
+ }
+
+ // fetch data adm2 
+
+ const fetchData = async (url) => {
+    const res = await fetch(url)
+    const data = await res.json()
+
+    console.log(data)
+
+    return data
+
  }
       
   return (
@@ -77,7 +139,7 @@ useEffect(()=> {
 
           
        </Select>
-       <Select {...register('Adm1')}>
+       <Select {...register('Adm1')} onChange={onAdm1Chnage}>
           
           <option defaultValue="Adm1">Adm1</option>
           <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
@@ -88,7 +150,8 @@ useEffect(()=> {
        <Select {...register('Adm2')}>
           
           <option defaultValue="1">1</option>
-          <option value="2">2</option>
+          <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
+          console.log({optionsAdm2})
           
        </Select>
        <Date>
