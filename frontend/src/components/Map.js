@@ -21,21 +21,7 @@ function MapDeck(){
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
-        <Source 
-        id='testSource' 
-        type='raster' 
-        tiles={["mapbox://styles/korykorir123/cl0hzgbrv000515o9adccekbk"]} 
-        tileSize={256}>
         
-        
-        <Layer 
-            id ='simple-tiles'
-            type = 'raster'
-            source = 'raster-tiles'
-            minzoom ={0} 
-            maxzoom =  {22 }
-            />
-       </Source>
 
         
       <Marker longitude={36.543} latitude={0.453} color="red" />
