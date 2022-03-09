@@ -105,7 +105,7 @@ getWardList()
       }
    
        getAdm2()
-     }, [])
+     }, [Adm1])
 
 
 
@@ -117,7 +117,7 @@ useEffect(()=> {
    }
 
    getAdm3()
-  }, [])
+  }, [Adm2])
 
 // Use effect to update list of counties 
 useEffect(()=> {
