@@ -55,8 +55,8 @@ const Form = ({adm0Array}) => {
    const [StartDate, setStartDate] = useState('2020-03-12');
    const [EndDate, setEndDate] = useState('2020-03-12');
    const [Adm0, setAdm0] = useState('')
-   const [Adm1, setAdm1] = useState('Baringo')
-   const [Adm2, setAdm2] = useState('Mogotio')
+   const [Adm1, setAdm1] = useState('')
+   const [Adm2, setAdm2] = useState('')
 
 
    const onSubmit= (data)=>{
