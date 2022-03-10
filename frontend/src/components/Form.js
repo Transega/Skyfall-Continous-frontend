@@ -6,9 +6,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import {useForm}   from 'react-hook-form';
 
-import MapDeck from './Map';
+// import MapDeck from './Map';
 
-import Card from './Card';
+// import Card from './Card';
 
 // import React from 'react'
 //  urls 
@@ -35,43 +35,21 @@ const Form = ({adm0Array}) => {
    const [adm3Array, setadm3Array] = useState([])
 
 // Iterate over the array for admn level names 
-   const optionsAdm1 = adm1Array.map((item) => {
-      return (
-         <option key={item} value={item}> 
-         {item}
-         </option>
-      )
-   })
 
-
-   // const optionsAdm1 = () =>{
-   //    var Adm = adm1Array.map((item) => {
-   //       return (
-   //          <option key={item} value={item}> 
-   //          {item}
-   //          </option>
-   //       )
-   //    })
-   // return Adm
+   const customoptions = (anArray) =>{
+      var opt = anArray.map((item) => {
+         return (
+            <option key={item} value={item}> 
+            {item}
+            </option>
+         )
+      })
+   return opt
       
-   // }
+   }
    
 
-   const optionsAdm2 = adm2Array.map((item) => {
-      return (
-         <option key={item} value={item}> 
-         {item}
-         </option>
-      )
-   })
-
-   const optionsAdm3 = adm3Array.map((item) => {
-      return (
-         <option key={item} value={item}> 
-         {item}
-         </option>
-      )
-   })
+  
 
 
    const { register, handleSubmit } = useForm();
@@ -87,8 +65,22 @@ const Form = ({adm0Array}) => {
  const [allowedProducts, setallowedProducts] = useState([])
  const [allowedSensor, setallowedSensor] = useState([])
 
+ const [platformSelected, setplatformSelected] = useState('')
+ const [sensorSelected, setsensorSelected] = useState('')
 
 
+
+
+ const rsProducts = {
+    'Landsat':{
+       'L8':['NDVI']
+    },
+
+    'Sentinel':{
+       'Sentinel_2':['NDVI', 'NDMI']
+    }
+    
+ }
 
    // use state for Geojson data 
 
@@ -149,6 +141,26 @@ const onAdm3Chnage = (e) => {
    var adm3Selected = e.target.value
    setAdm3(adm3Selected)
    
+}
+
+// platform changes 
+const onchangePlatform = (e) => {
+   var selectedp = e.target.value
+   setplatformSelected(selectedp)
+   var sensor = Object.keys(rsProducts[selectedp])
+   console.log(sensor)
+   setallowedSensor(sensor)
+
+
+}
+
+// sensor changes 
+const onchangeSensor = (e) => {
+   var selectedSensor = e.target.value
+   setsensorSelected(selectedSensor)
+   var productavailabe = rsProducts[platformSelected][selectedSensor]
+   setallowedProducts(productavailabe)
+   console.log(productavailabe, platformSelected,'sensor')
 }
 
 useEffect(()=> {
@@ -250,33 +262,31 @@ useEffect(()=> {
        <Select {...register('Adm0')} 
        onChange={onAdm0Chnage}>
        <option value="" hidden>Adm0</option>
-          <option value={options}>{options.value} 
-          </option>
-          console.log({options})
+         {customoptions(adm0Array)}
 
           
        </Select>
        <Select {...register('Adm1')} onChange={onAdm1Chnage}>
           
           <option defaultValue="Adm1">Adm1</option>
-          <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
-          console.log({optionsAdm1})
+          {customoptions(adm1Array)}
+   
           
        </Select>
 
        <Select {...register('Adm2')} onChange={onAdm2Chnage}>
           
           <option defaultValue="1">Adm2</option>
-          <option value={optionsAdm2.value}>{optionsAdm2.value}</option>
-          console.log({optionsAdm2})
+         {customoptions(adm2Array)}
+         
           
        </Select>
        
        <Select {...register('Adm3')} className='Adm3' onChange={onAdm3Chnage}>
           
           <option defaultValue="ADM3">Adm3</option>
-          <option value={optionsAdm3.value}>{optionsAdm3.value}</option>
-          console.log({optionsAdm3})
+          {customoptions(adm3Array)}
+        
           
        </Select>
        
@@ -290,24 +300,20 @@ useEffect(()=> {
    <Container>
     <StyledForm >
 
-       <Select {...register('Platform')}>
+       <Select {...register('Platform')} onChange={onchangePlatform}>
           <option defaultValue="" hidden>Plaform</option>
-          <option value="Sentinel">Sentinel</option>
-          <option value="Landsat">Landsat</option>
+          {customoptions(allowedPlatform)}
  
        </Select>
-       <Select {...register('Sensor')}>
+       <Select {...register('Sensor')} onChange={onchangeSensor}>
           <option defaultValue="" hidden>Sensor</option>
-          <option value="Sentinel-1">Sentinel-1</option>
-          <option value="Sentinel-2">Sentinel-2</option>
-          <option value="Landsat-8">Landsat-8</option>
+          {customoptions(allowedSensor)}
           
        </Select>
 
-       <Select {...register('Product')}>
+       <Select {...register('Product')} >
           <option defaultValue="" hidden>Product</option>
-          <option value="NDVI">NDVI</option>
-          <option value="NDMI">NDMI</option>
+          {customoptions(allowedProducts)}
           
        </Select>
       
