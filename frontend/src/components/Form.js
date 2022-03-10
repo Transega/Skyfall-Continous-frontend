@@ -85,6 +85,14 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
    const [Adm2, setAdm2] = useState(null)
    const [Adm3, setAdm3] = useState(null)
 
+ // use state for sensor and product selections
+ const [allowedPlatform, setallowedPlatform] = useState(['Landsat', 'Sentinel'])
+ const [allowedProducts, setallowedProducts] = useState([])
+ const [allowedSensor, setallowedSensor] = useState([])
+
+
+
+
    // use state for Geojson data 
 
    
