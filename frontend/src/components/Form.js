@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useCallback} from 'react'
 import { Select, StyledFormWrapper,StyledButton, StyledForm,Date} from './styles/Form.styled'
 
 import { Container } from './styles/Container.styled'
@@ -26,13 +26,27 @@ const Form = ({adm0Array}) => {
    const [adm3Array, setadm3Array] = useState([])
 
 // Iterate over the array for admn level names 
-   const optionsAdm1 = adm1Array.map((item) => {
-      return (
-         <option key={item} value={item}> 
-         {item}
-         </option>
-      )
-   })
+   // const optionsAdm1 = adm1Array.map((item) => {
+   //    return (
+   //       <option key={item} value={item}> 
+   //       {item}
+   //       </option>
+   //    )
+   // })
+
+
+   const optionsAdm1 = () =>{
+      var Adm = adm1Array.map((item) => {
+         return (
+            <option key={item} value={item}> 
+            {item}
+            </option>
+         )
+      })
+   return Adm
+      
+   }
+   
 
    const optionsAdm2 = adm2Array.map((item) => {
       return (
@@ -54,104 +68,109 @@ const Form = ({adm0Array}) => {
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('2020-03-12');
    const [EndDate, setEndDate] = useState('2020-03-12');
-   const [Adm0, setAdm0] = useState('')
-   const [Adm1, setAdm1] = useState('')
-   const [Adm2, setAdm2] = useState('')
+   const [Adm0, setAdm0] = useState(null)
+   const [Adm1, setAdm1] = useState(null)
+   const [Adm2, setAdm2] = useState(null)
+   const [Adm3, setAdm3] = useState(null)
 
 
-   const onSubmit= (data)=>{
-      console.log(data);
-   }
-   const onSubmit2= (data)=>{
-      console.log(data);
-   }
+ 
 // track chnages for user selection on Adm0
-   const onAdm0Chnage = (e) => {
-      setAdm0(e.target.value)
-      console.log(Adm0, 'adm0..')
-    }
 
+
+const onAdm0Chnage =(e) => {
+   let oldValue = Adm0;
+   console.log(Adm0, 'adm0..33')
+   let newValue = e.target.value;
+      setAdm0(newValue);
+   console.log(Adm0, 'adm0..')
+   
+   }
+
+   
    // track chnages for user selection on Adm1 and perform some tasks
+ 
+const onAdm1Chnage = (e) => {
 
- const onAdm1Chnage = (e) => {
-      setAdm1(e.target.value)
-      console.log(Adm1, 'admi1 selected..')
-     
-      const getSubcountyList = async () => {
-         const subcountyList = await fetchData(adm2Namesurl+Adm1)
-         setadm2Array(subcountyList['sub_counties'][0])
-      }
+   
+   const newValue = e.target.value;
+   setAdm1(newValue)
+   console.log(Adm1, 'admi1 selected..')
+   
+   const getSubcountyList = async (Adm1) => {
+      const subcountyList = await fetchData(adm2Namesurl+Adm1)
+      setadm2Array(subcountyList['sub_counties'][0])
+   }
 
-      getSubcountyList()
+   getSubcountyList()
 
     }
 // adm2 changes 
-    const onAdm2Chnage = (e) => {
-       setAdm2(e.target.value)
-       console.log('adm2 changed to ', Adm2)
 
-      const getWardList = async () => {
-         const wardsList = await fetchData(adm3Namesurl+Adm2)
-         setadm3Array(wardsList['Wards'])
-      }
+const onAdm2Chnage = (e) => {
+   setAdm2(e.target.value)
+   console.log('adm2 changed to ', Adm2)
+
+   const getWardList = async () => {
+   const wardsList = await fetchData(adm3Namesurl+Adm2)
+   setadm3Array(wardsList['Wards'])
+}
 getWardList()
 
     }
 
-    useEffect(()=> {
-      const getAdm2 = async () => {
-        const subcountyList = await fetchData(adm2Namesurl+Adm1)
-        setadm2Array(subcountyList['sub_counties'][0])
-      }
-   
-       getAdm2()
-     }, [Adm1])
+useEffect(()=> {
+   const getAdm2 = async () => {
+   const subcountyList = await fetchData(adm2Namesurl+Adm1)
+   setadm2Array(subcountyList['sub_counties'][0])
+}
+
+   getAdm2()
+}, [Adm2,Adm1])
 
 
 
 // adm 3  use effect 
 useEffect(()=> {
    const getAdm3 = async () => {
-     const wardsList = await fetchData(adm3Namesurl+Adm2)
-     setadm3Array(wardsList['Wards'])
+   const wardsList = await fetchData(adm3Namesurl+Adm2)
+   setadm3Array(wardsList['Wards'])
    }
 
    getAdm3()
-  }, [Adm2])
+  }, [Adm3,Adm2])
 
 // Use effect to update list of counties 
 useEffect(()=> {
    const getAdm1 = async () => {
-     const Adm1fromsever = await fetchAdm1()
-     setadm1Array(Adm1fromsever['counties'])
+   const Adm1fromsever = await fetchAdm1()
+   setadm1Array(Adm1fromsever['counties'])
    }
 
     getAdm1()
-  }, [])
+  }, [Adm1])
 
   // use effect to fetch other datasets from server 
 
   
 
-      // fetch data  from server 
-      // admin 1
+// Fetch Counties
+      
   const fetchAdm1 = async () => {
    const res = await fetch(baseurlshp+'/countiesFacilities/get_adm1_shapefile/?county_names=ALL')
    const data = await res.json()
-   
-   
    return data  
  }
 
- // fetch data adm2 
+ // Fetch Wards and Subcounties 
 
- const fetchData = async (url) => {
-    const res = await fetch(url)
-    const data = await res.json()
+  const fetchData = async (url) => {
+   const res = await fetch(url)
+   const data = await res.json()
 
-    console.log(data)
+   console.log(data)
 
-    return data
+   return data
 
  }
       
@@ -171,8 +190,8 @@ useEffect(()=> {
        <Select {...register('Adm1')} onChange={onAdm1Chnage}>
           
           <option defaultValue="Adm1">Adm1</option>
-          <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
-          console.log({optionsAdm1})
+          <option >{optionsAdm1()}</option>
+          {/* console.log({optionsAdm1}) */}
           
        </Select>
 
@@ -183,7 +202,7 @@ useEffect(()=> {
           console.log({optionsAdm2})
           
        </Select>
-       <Date>
+       
        <Select {...register('Adm3')} className='Adm3'>
           
           <option defaultValue="ADM3">Adm3</option>
@@ -194,13 +213,13 @@ useEffect(()=> {
        
        
        {/* <StyledButton type="submit">Geometry</StyledButton> */}
-       </Date>
+       
     </StyledForm>
 
    </Container>
 
    <Container>
-    <StyledForm onSubmit ={handleSubmit(onSubmit2)}>
+    <StyledForm >
 
        <Select {...register('Platform')}>
           <option defaultValue="" hidden>Plaform</option>
