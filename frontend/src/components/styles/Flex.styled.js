@@ -11,3 +11,7 @@ export const Flex = styled.div`
     text-align: center;
   }
 `
+export const FlexColumn = styled(Flex)`
+flex-direction: column;
+
+`

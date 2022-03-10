@@ -1,6 +1,8 @@
 import React,{useState,useEffect, useCallback} from 'react'
 import { Select, StyledFormWrapper,StyledButton, StyledForm,Date} from './styles/Form.styled'
 
+
+
 import { Container } from './styles/Container.styled'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -9,6 +11,7 @@ import {useForm}   from 'react-hook-form';
 import MapDeck from './Map';
 
 import Card from './Card';
+import { StyledHeader, StyledUl,Nav } from './styles/Header.styled';
 
 // import React from 'react'
 //  urls 
@@ -21,7 +24,7 @@ const adm2geoJsonurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?sub_c
 const adm3geoJsonurl = baseurlshp+'/countiesFacilities/get_adm3_shapefile/?ward_name='
 
 
-const Form = ({adm0Array}) => {
+const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson}) => {
    const options = adm0Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -84,10 +87,7 @@ const Form = ({adm0Array}) => {
 
    // use state for Geojson data 
 
-   const [ADM1Geojson, setADM1Geojson] = useState({})
-   const [ADM2Geojson, setADM2Geojson] = useState({})
-   const [ADM3Geojson, setADM3Geojson] = useState({})
-
+   
 
 
  
@@ -235,6 +235,10 @@ useEffect(()=> {
  }
       
   return (
+     <StyledHeader>
+        <Container>
+           <Nav>
+              <StyledUl>
    <StyledFormWrapper>
       
    <Container>
@@ -315,10 +319,15 @@ useEffect(()=> {
    </Container>
   
  </StyledFormWrapper>
+ </StyledUl>
+ </Nav>
+
+ </Container>
  
-   // 
+ </StyledHeader>
 
   )
+   
 }
 
 export default Form
