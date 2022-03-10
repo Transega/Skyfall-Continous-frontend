@@ -17,7 +17,7 @@ export default function Card({adm0Array}) {
   return (
     <Container>
           <Flex>
-    <SideBarMenu/>
+    <SideBarMenu ADM1Geojson ={ADM1Geojson}/>
     <StyledCard layout = "column">
       <Form 
       adm0Array = {adm0Array}

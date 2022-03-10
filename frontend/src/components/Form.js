@@ -120,7 +120,9 @@ const onAdm1Chnage = (e) => {
    const newValue = e.target.value;
    setAdm1(newValue)
    console.log(Adm1, 'admi1 selected..')
-   
+  
+  console.log(ADM1Geojson);
+
    const getSubcountyList = async (Adm1) => {
       const subcountyList = await fetchData(adm2Namesurl+Adm1)
       setadm2Array(subcountyList['sub_counties'][0])
@@ -161,7 +163,7 @@ useEffect(()=> {
 }
 
    getAdm2()
-}, [Adm2,Adm1])
+}, [Adm2,Adm1,setADM2Geojson])
 
 
 
@@ -178,7 +180,7 @@ useEffect(()=> {
    }
 
    getAdm3()
-  }, [Adm2])
+  }, [Adm2,setADM3Geojson])
 
   // use this for admin 3 geojson
   useEffect(()=> {
@@ -192,7 +194,7 @@ useEffect(()=> {
    }
 
    getAdm3geojson()
-  }, [Adm3])
+  }, [Adm3,setADM3Geojson])
 
 // Use effect to update list of counties 
 useEffect(()=> {
@@ -201,12 +203,12 @@ useEffect(()=> {
    setadm1Array(Adm1fromsever['counties'])
    // get shapefile  json from server 
    const Adm1Json = await fetchJson(adm1geoJsonurl+Adm1)
-   
+      
    setADM1Geojson(Adm1Json)
    }
 
     getAdm1()
-  }, [Adm1])
+  }, [Adm1,setADM1Geojson])
 
   // use effect to fetch other datasets from server 
 

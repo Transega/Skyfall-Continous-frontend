@@ -5,7 +5,9 @@ import Logo from './Logo'
 import { Container } from './styles/Container.styled'
 
 
-const SideBarMenu = () => {
+const SideBarMenu = ({ADM1Geojson}) => {
+
+  console.log(ADM1Geojson);
   return (
     <>
     
@@ -15,7 +17,9 @@ const SideBarMenu = () => {
     <Logo/>
     </Container>
       <Chart/>
-
+      {Object.keys(ADM1Geojson).length=== 0 ? <p>No data yet</p>:
+      <p>There is data </p>
+      }
     </StyledSide>
     
     </>

@@ -5,7 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
 
-function MapDeck(){
+function MapDeck({ADM1Geojson}){
 
     const [viewState, setViewState] = useState({
         longitude: 36.543,
