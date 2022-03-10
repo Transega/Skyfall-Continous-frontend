@@ -6,11 +6,20 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import {useForm}   from 'react-hook-form';
 
+import MapDeck from './Map';
+
+import Card from './Card';
+
 // import React from 'react'
 //  urls 
 const baseurlshp = 'http://149.28.234.94:8080'
 const adm2Namesurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_sub_counties_names='
 const adm3Namesurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?Get_sub_counties_names='
+// urls for geojson data 
+const adm1geoJsonurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_county='
+const adm2geoJsonurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?sub_county='
+const adm3geoJsonurl = baseurlshp+'/countiesFacilities/get_adm3_shapefile/?ward_name='
+
 
 const Form = ({adm0Array}) => {
    const options = adm0Array.map((item) => {
@@ -26,26 +35,26 @@ const Form = ({adm0Array}) => {
    const [adm3Array, setadm3Array] = useState([])
 
 // Iterate over the array for admn level names 
-   // const optionsAdm1 = adm1Array.map((item) => {
-   //    return (
-   //       <option key={item} value={item}> 
-   //       {item}
-   //       </option>
-   //    )
-   // })
+   const optionsAdm1 = adm1Array.map((item) => {
+      return (
+         <option key={item} value={item}> 
+         {item}
+         </option>
+      )
+   })
 
 
-   const optionsAdm1 = () =>{
-      var Adm = adm1Array.map((item) => {
-         return (
-            <option key={item} value={item}> 
-            {item}
-            </option>
-         )
-      })
-   return Adm
+   // const optionsAdm1 = () =>{
+   //    var Adm = adm1Array.map((item) => {
+   //       return (
+   //          <option key={item} value={item}> 
+   //          {item}
+   //          </option>
+   //       )
+   //    })
+   // return Adm
       
-   }
+   // }
    
 
    const optionsAdm2 = adm2Array.map((item) => {
@@ -72,6 +81,13 @@ const Form = ({adm0Array}) => {
    const [Adm1, setAdm1] = useState(null)
    const [Adm2, setAdm2] = useState(null)
    const [Adm3, setAdm3] = useState(null)
+
+   // use state for Geojson data 
+
+   const [ADM1Geojson, setADM1Geojson] = useState({})
+   const [ADM2Geojson, setADM2Geojson] = useState({})
+   const [ADM3Geojson, setADM3Geojson] = useState({})
+
 
 
  
@@ -119,10 +135,21 @@ getWardList()
 
     }
 
+// adm3 changes 
+
+const onAdm3Chnage = (e) => {
+   var adm3Selected = e.target.value
+   setAdm3(adm3Selected)
+   
+}
+
 useEffect(()=> {
    const getAdm2 = async () => {
    const subcountyList = await fetchData(adm2Namesurl+Adm1)
    setadm2Array(subcountyList['sub_counties'][0])
+   // get shapefile json from server 
+   const Adm2GeoJson = await fetchJson(adm2geoJsonurl+Adm2)
+   setADM2Geojson(Adm2GeoJson)
 }
 
    getAdm2()
@@ -135,16 +162,39 @@ useEffect(()=> {
    const getAdm3 = async () => {
    const wardsList = await fetchData(adm3Namesurl+Adm2)
    setadm3Array(wardsList['Wards'])
+   // get shapefile json from server 
+   const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
+   console.log('test')
+   setADM3Geojson(ADM3Geojson)
+
    }
 
    getAdm3()
-  }, [Adm3,Adm2])
+  }, [Adm2])
+
+  // use this for admin 3 geojson
+  useEffect(()=> {
+   const getAdm3geojson = async () => {
+   
+   // get shapefile json from server 
+   const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
+   console.log('test')
+   setADM3Geojson(ADM3Geojson)
+
+   }
+
+   getAdm3geojson()
+  }, [Adm3])
 
 // Use effect to update list of counties 
 useEffect(()=> {
    const getAdm1 = async () => {
    const Adm1fromsever = await fetchAdm1()
    setadm1Array(Adm1fromsever['counties'])
+   // get shapefile  json from server 
+   const Adm1Json = await fetchJson(adm1geoJsonurl+Adm1)
+   
+   setADM1Geojson(Adm1Json)
    }
 
     getAdm1()
@@ -168,14 +218,25 @@ useEffect(()=> {
    const res = await fetch(url)
    const data = await res.json()
 
-   console.log(data)
+   // console.log(data)
 
    return data
 
  }
+
+ // fetch json data for the admn levels
+ const fetchJson = async (url) => {
+    const res = await fetch(url)
+    const data = await res.json()
+
+    console.log(data, 'geojson')
+
+    return data
+ }
       
   return (
    <StyledFormWrapper>
+      
    <Container>
    <StyledForm> 
        <Select {...register('Adm0')} 
@@ -190,8 +251,8 @@ useEffect(()=> {
        <Select {...register('Adm1')} onChange={onAdm1Chnage}>
           
           <option defaultValue="Adm1">Adm1</option>
-          <option >{optionsAdm1()}</option>
-          {/* console.log({optionsAdm1}) */}
+          <option value={optionsAdm1.value}>{optionsAdm1.value}</option>
+          console.log({optionsAdm1})
           
        </Select>
 
@@ -203,7 +264,7 @@ useEffect(()=> {
           
        </Select>
        
-       <Select {...register('Adm3')} className='Adm3'>
+       <Select {...register('Adm3')} className='Adm3' onChange={onAdm3Chnage}>
           
           <option defaultValue="ADM3">Adm3</option>
           <option value={optionsAdm3.value}>{optionsAdm3.value}</option>
@@ -249,9 +310,14 @@ useEffect(()=> {
        <StyledButton type="submit">Compute</StyledButton>
        </Date>
     </StyledForm>
- 
+    {/* <MapDeck/> */}
+   
    </Container>
+  
  </StyledFormWrapper>
+ 
+   // 
+
   )
 }
 
