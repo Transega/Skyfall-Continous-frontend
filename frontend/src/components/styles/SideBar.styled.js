@@ -10,7 +10,7 @@ export const StyledSide= styled.div`
   margin: 10px 0;
   padding: 20px;
   height: 800px;
- width: 30%
+ width: 30%;
 
 
  
