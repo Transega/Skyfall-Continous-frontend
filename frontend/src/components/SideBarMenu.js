@@ -7,7 +7,7 @@ import { Container } from './styles/Container.styled'
 
 const SideBarMenu = ({ADM1Geojson}) => {
 
-  console.log(ADM1Geojson);
+ 
   return (
     <>
     

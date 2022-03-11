@@ -10,6 +10,7 @@ import {useForm}   from 'react-hook-form';
 import { StyledHeader } from './styles/Header.styled';
 import { Nav } from './styles/Header.styled';
 import { StyledUl } from './styles/Header.styled';
+import bbox from '@turf/bbox';
 // import MapDeck from './Map';
 
 // import Card from './Card';
@@ -25,7 +26,7 @@ const adm2geoJsonurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?sub_c
 const adm3geoJsonurl = baseurlshp+'/countiesFacilities/get_adm3_shapefile/?ward_name='
 
 
-const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson}) => {
+const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef}) => {
    const options = adm0Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -33,6 +34,7 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
          </option>
       )
    })
+   console.log(ADM1Geojson);
    // set lists for admin levels selection and update using useState
    const [adm1Array, setadm1Array] = useState([])
    const [adm2Array, setadm2Array] = useState([])
@@ -177,6 +179,15 @@ useEffect(()=> {
    // get shapefile json from server 
    const Adm2GeoJson = await fetchJson(adm2geoJsonurl+Adm2)
    setADM2Geojson(Adm2GeoJson)
+
+   const [minLng, minLat, maxLng, maxLat] = bbox(Adm2GeoJson);
+
+
+   mapRef.current.fitBounds(
+      [
+        [minLng, minLat],
+        [maxLng, maxLat]
+      ])
 }
 
    getAdm2()
@@ -193,6 +204,14 @@ useEffect(()=> {
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
    console.log('test')
    setADM3Geojson(ADM3Geojson)
+   const [minLng, minLat, maxLng, maxLat] = bbox(ADM3Geojson);
+
+   
+   mapRef.current.fitBounds(
+      [
+        [minLng, minLat],
+        [maxLng, maxLat]
+      ])
 
    }
 
@@ -208,12 +227,15 @@ useEffect(()=> {
    console.log('test')
    setADM3Geojson(ADM3Geojson)
 
+
+
    }
 
    getAdm3geojson()
   }, [Adm3,setADM3Geojson])
 
 // Use effect to update list of counties 
+
 useEffect(()=> {
    const getAdm1 = async () => {
    const Adm1fromsever = await fetchAdm1()
@@ -222,11 +244,24 @@ useEffect(()=> {
    const Adm1Json = await fetchJson(adm1geoJsonurl+Adm1)
       
    setADM1Geojson(Adm1Json)
+
+   const [minLng, minLat, maxLng, maxLat] = bbox(Adm1Json);
+
+   console.log(mapRef);
+   mapRef.current.fitBounds(
+      [
+        [minLng, minLat],
+        [maxLng, maxLat]
+      ])
+
    }
 
     getAdm1()
-  }, [Adm1,setADM1Geojson])
+    
 
+  }, [Adm1])
+
+  
   // use effect to fetch other datasets from server 
 
   
