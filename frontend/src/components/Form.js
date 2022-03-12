@@ -17,13 +17,13 @@ import bbox from '@turf/bbox';
 
 // import React from 'react'
 //  urls 
-const baseurlshp = 'http://149.28.234.94:8080'
-const adm2Namesurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_sub_counties_names='
-const adm3Namesurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?Get_sub_counties_names='
+const baseurlshp = 'http://208.85.21.253:8080/AdminData'
+const adm2Namesurl = baseurlshp+'/get_adm2_shapefile/?Get_sub_counties_names='
+const adm3Namesurl = baseurlshp+'/get_adm3_shapefile/?Get_wards_in_sub_county='
 // urls for geojson data 
-const adm1geoJsonurl = baseurlshp+'/countiesFacilities/get_adm1_shapefile/?Get_county='
-const adm2geoJsonurl = baseurlshp+'/countiesFacilities/get_adm2_shapefile/?sub_county='
-const adm3geoJsonurl = baseurlshp+'/countiesFacilities/get_adm3_shapefile/?ward_name='
+const adm1geoJsonurl = baseurlshp+'/get_adm1_shapefile/?Get_county='
+const adm2geoJsonurl = baseurlshp+'/get_adm2_shapefile/?sub_county='
+const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 
 
 const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef}) => {
@@ -124,7 +124,7 @@ const onAdm1Chnage = (e) => {
 
    const getSubcountyList = async (Adm1) => {
       const subcountyList = await fetchData(adm2Namesurl+Adm1)
-      setadm2Array(subcountyList['sub_counties'][0])
+      setadm2Array(subcountyList['sub_counties'])
    }
 
    getSubcountyList()
@@ -175,7 +175,7 @@ const onchangeSensor = (e) => {
 useEffect(()=> {
    const getAdm2 = async () => {
    const subcountyList = await fetchData(adm2Namesurl+Adm1)
-   setadm2Array(subcountyList['sub_counties'][0])
+   setadm2Array(subcountyList['sub_counties'])
    // get shapefile json from server 
    const Adm2GeoJson = await fetchJson(adm2geoJsonurl+Adm2)
    setADM2Geojson(Adm2GeoJson)
@@ -204,6 +204,7 @@ useEffect(()=> {
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
    console.log('test')
    setADM3Geojson(ADM3Geojson)
+
    const [minLng, minLat, maxLng, maxLat] = bbox(ADM3Geojson);
 
    
@@ -269,7 +270,7 @@ useEffect(()=> {
 // Fetch Counties
       
   const fetchAdm1 = async () => {
-   const res = await fetch(baseurlshp+'/countiesFacilities/get_adm1_shapefile/?county_names=ALL')
+   const res = await fetch('http://127.0.0.1:8080/AdminData/get_adm1_shapefile/?county_names=ALL')
    const data = await res.json()
    return data  
  }
