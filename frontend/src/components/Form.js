@@ -296,6 +296,9 @@ useEffect(()=> {
 
     return data
  }
+
+ // fetch Remote sensing data from api
+ 
       
   return (
      <StyledHeader>
