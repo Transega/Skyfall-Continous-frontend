@@ -270,7 +270,7 @@ useEffect(()=> {
 // Fetch Counties
       
   const fetchAdm1 = async () => {
-   const res = await fetch('http://127.0.0.1:8080/AdminData/get_adm1_shapefile/?county_names=ALL')
+   const res = await fetch(baseurlshp+'/get_adm1_shapefile/?county_names=ALL')
    const data = await res.json()
    return data  
  }
