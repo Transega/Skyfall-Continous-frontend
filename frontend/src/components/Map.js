@@ -16,7 +16,7 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
         zoom: 10
     })
 
-    console.log(ADM1Geojson);
+    // console.log(ADM1Geojson);
 
     const layerStyle = {
       id: 'point',
