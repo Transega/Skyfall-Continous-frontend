@@ -25,6 +25,10 @@ const adm1geoJsonurl = baseurlshp+'/get_adm1_shapefile/?Get_county='
 const adm2geoJsonurl = baseurlshp+'/get_adm2_shapefile/?sub_county='
 const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 
+// url for remote sensing data 
+
+const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
+
 
 const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef}) => {
    const options = adm0Array.map((item) => {
@@ -34,7 +38,7 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
          </option>
       )
    })
-   console.log(ADM1Geojson);
+   // console.log(ADM1Geojson);
    // set lists for admin levels selection and update using useState
    const [adm1Array, setadm1Array] = useState([])
    const [adm2Array, setadm2Array] = useState([])
@@ -73,6 +77,14 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
  const [platformSelected, setplatformSelected] = useState('')
  const [sensorSelected, setsensorSelected] = useState('')
+ const [productSelected, setproductSelected] = useState('')
+
+ // use state for remote sensing data from GEE 
+
+ const [adm1RsData, setadm1RsData] = useState({})
+ const [adm2RsData, setadm2RsData] = useState({})
+ const [adm3RsData, setadm3RsData] = useState({})
+
 
 
 
@@ -103,7 +115,7 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
 const onAdm0Chnage =(e) => {
    let oldValue = Adm0;
-   console.log(Adm0, 'adm0..33')
+   // console.log(Adm0, 'adm0..33')
    let newValue = e.target.value;
       setAdm0(newValue);
    // console.log(Adm0, 'adm0..')
@@ -118,9 +130,9 @@ const onAdm1Chnage = (e) => {
    
    const newValue = e.target.value;
    setAdm1(newValue)
-   console.log(Adm1, 'admi1 selected..')
+   // console.log(Adm1, 'admi1 selected..')
   
-  console.log(ADM1Geojson);
+//   console.log(ADM1Geojson);
 
    const getSubcountyList = async (Adm1) => {
       const subcountyList = await fetchData(adm2Namesurl+Adm1)
@@ -134,7 +146,7 @@ const onAdm1Chnage = (e) => {
 
 const onAdm2Chnage = (e) => {
    setAdm2(e.target.value)
-   console.log('adm2 changed to ', Adm2)
+   // console.log('adm2 changed to ', Adm2)
 
    const getWardList = async () => {
    const wardsList = await fetchData(adm3Namesurl+Adm2)
@@ -157,7 +169,7 @@ const onchangePlatform = (e) => {
    var selectedp = e.target.value
    setplatformSelected(selectedp)
    var sensor = Object.keys(rsProducts[selectedp])
-   console.log(sensor)
+   // console.log(sensor)
    setallowedSensor(sensor)
 
 
@@ -169,7 +181,15 @@ const onchangeSensor = (e) => {
    setsensorSelected(selectedSensor)
    var productavailabe = rsProducts[platformSelected][selectedSensor]
    setallowedProducts(productavailabe)
-   console.log(productavailabe, platformSelected,'sensor')
+   // console.log(productavailabe, platformSelected,'sensor')
+}
+
+// onchange platform 
+const onchangeProduct = (e) => {
+   var selectedProduct = e.target.value
+   setproductSelected(selectedProduct)
+
+
 }
 
 useEffect(()=> {
@@ -202,7 +222,7 @@ useEffect(()=> {
    setadm3Array(wardsList['Wards'])
    // get shapefile json from server 
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
-   console.log('test')
+   // console.log('test')
    setADM3Geojson(ADM3Geojson)
 
    const [minLng, minLat, maxLng, maxLat] = bbox(ADM3Geojson);
@@ -225,7 +245,7 @@ useEffect(()=> {
    
    // get shapefile json from server 
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
-   console.log('test')
+   // console.log('test')
    setADM3Geojson(ADM3Geojson)
 
 
@@ -248,7 +268,7 @@ useEffect(()=> {
 
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm1Json);
 
-   console.log(mapRef);
+   // console.log(mapRef);
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
@@ -304,26 +324,51 @@ useEffect(()=> {
       const res = await fetch(url)
       const data = await res.json()
 
-      console.log(data)
+      console.log(data, 'success')
       return data
  }
 
  const onsubmit = (e) => {
    e.preventDefault()
    // validate selections
-   if (!Adm1 & ! Adm1!=='Adm1'){
-      alert('please make Admin level selections')
-      return
-   }
-// dates
-   if (!StartDate & !EndDate){
-      alert('please add dates for analysis')
-      return
-   }
-// platform sensor and product
-if (!platformSelected & !sensorSelected){
-   alert('Please select platform sensor and product')
-}
+      if (!Adm1 & ! Adm1!=='Adm1'){
+         alert('please make Admin level selections')
+         return
+      }
+
+      // platform sensor and product
+      if (!platformSelected){
+         alert('Please select platform')
+      }
+      if (!sensorSelected){
+         alert('Please select Sensor')
+         return
+      }
+      if (!productSelected){
+         alert('Please select product')
+         return
+      }
+      // dates
+      if (!StartDate){
+         alert('please add start date')
+         return
+      }
+      if (!EndDate){
+         alert('please add end date')
+         return
+      }
+
+      
+      // console.log(Adm1,sensorSelected,platformSelected,productSelected)
+      const getadm1RsData = async () => {
+         // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
+         const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         '&end_date='+EndDate+'&county='+Adm1)
+
+      }
+      
+      getadm1RsData()
 
 
  }
@@ -390,7 +435,7 @@ if (!platformSelected & !sensorSelected){
           
        </Select>
 
-       <Select {...register('Product')} >
+       <Select {...register('Product')} onChange={onchangeProduct}>
           <option defaultValue="" hidden>Product</option>
           {customoptions(allowedProducts)}
           
