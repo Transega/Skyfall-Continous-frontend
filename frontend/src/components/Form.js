@@ -387,10 +387,17 @@ useEffect(()=> {
          // console.log(adm3RsDataFromserver, 'adm3')
          setadm3RsData(adm3RsDataFromserver)
 
+        
+
+
 
       }
       
       getadm1RsData()
+      //  Reset the form 
+      setAdm1('')
+      setAdm2(null)
+      setAdm3(null)
 
 
  }
