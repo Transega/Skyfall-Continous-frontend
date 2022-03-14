@@ -59,8 +59,8 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
 
    const { register, handleSubmit } = useForm();
-   const [StartDate, setStartDate] = useState('2020-03-12');
-   const [EndDate, setEndDate] = useState('2020-03-12');
+   const [StartDate, setStartDate] = useState('');
+   const [EndDate, setEndDate] = useState('');
    const [Adm0, setAdm0] = useState(null)
    const [Adm1, setAdm1] = useState(null)
    const [Adm2, setAdm2] = useState(null)
@@ -106,7 +106,7 @@ const onAdm0Chnage =(e) => {
    console.log(Adm0, 'adm0..33')
    let newValue = e.target.value;
       setAdm0(newValue);
-   console.log(Adm0, 'adm0..')
+   // console.log(Adm0, 'adm0..')
    
    }
 
@@ -292,12 +292,41 @@ useEffect(()=> {
     const res = await fetch(url)
     const data = await res.json()
 
-    console.log(data, 'geojson')
+   //  console.log(data, 'geojson')
 
     return data
  }
 
  // fetch Remote sensing data from api
+
+ const fetchRemoteSensingData = async (url) => {
+
+      const res = await fetch(url)
+      const data = await res.json()
+
+      console.log(data)
+      return data
+ }
+
+ const onsubmit = (e) => {
+   e.preventDefault()
+   // validate selections
+   if (!Adm1 & ! Adm1!=='Adm1'){
+      alert('please make Admin level selections')
+      return
+   }
+// dates
+   if (!StartDate & !EndDate){
+      alert('please add dates for analysis')
+      return
+   }
+// platform sensor and product
+if (!platformSelected & !sensorSelected){
+   alert('Please select platform sensor and product')
+}
+
+
+ }
  
       
   return (
@@ -348,7 +377,7 @@ useEffect(()=> {
    </Container>
 
    <Container>
-    <StyledForm >
+    <StyledForm onSubmit={onsubmit}>
 
        <Select {...register('Platform')} onChange={onchangePlatform}>
           <option defaultValue="" hidden>Plaform</option>
