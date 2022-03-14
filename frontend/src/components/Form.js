@@ -361,7 +361,9 @@ useEffect(()=> {
       
       // console.log(Adm1,sensorSelected,platformSelected,productSelected)
       const getadm1RsData = async () => {
+
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
+         //  Admin 1 RS data
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&county='+Adm1)
@@ -369,6 +371,7 @@ useEffect(()=> {
          // console.log(adm1RsDataFromserver, 'adm1 rs')
          setadm1RsData(adm1RsDataFromserver)
 
+         // Adm 2 RS data
          const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&subcounty='+Adm2)
@@ -376,11 +379,13 @@ useEffect(()=> {
          // console.log(adm2RsDataFromserver, 'adm2 rs')
          setadm2RsData(adm2RsDataFromserver)
 
+            // Adm 3 RS data 
          const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&ward='+Adm3)
 
-         console.log(adm3RsDataFromserver, 'adm3')
+         // console.log(adm3RsDataFromserver, 'adm3')
+         setadm3RsData(adm3RsDataFromserver)
 
 
       }
