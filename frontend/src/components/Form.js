@@ -366,6 +366,23 @@ useEffect(()=> {
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&county='+Adm1)
 
+         // console.log(adm1RsDataFromserver, 'adm1 rs')
+         setadm1RsData(adm1RsDataFromserver)
+
+         const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         '&end_date='+EndDate+'&subcounty='+Adm2)
+
+         // console.log(adm2RsDataFromserver, 'adm2 rs')
+         setadm2RsData(adm2RsDataFromserver)
+
+         const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         '&end_date='+EndDate+'&ward='+Adm3)
+
+         console.log(adm3RsDataFromserver, 'adm3')
+
+
       }
       
       getadm1RsData()
