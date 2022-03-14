@@ -395,7 +395,7 @@ useEffect(()=> {
       
       getadm1RsData()
       //  Reset the form 
-      setAdm1('')
+      setAdm1(null)
       setAdm2(null)
       setAdm3(null)
 
