@@ -19,6 +19,7 @@ export default function Card({adm0Array}) {
   const [adm3RsData, setadm3RsData] = useState({})
   const [myBoundsAdm3,setMyBoundsAdm3] = useState([])
   const [imageCoord, setImageCoord] = useState([])
+  const [showimage, setshowimage] = useState(false)
 
   return (
     <Container>
@@ -43,6 +44,7 @@ export default function Card({adm0Array}) {
       imageCoord = {imageCoord}
       myBoundsAdm3 = {myBoundsAdm3}
       setMyBoundsAdm3 = {setMyBoundsAdm3}
+      setshowimage ={setshowimage}
    
    
 
@@ -61,6 +63,13 @@ export default function Card({adm0Array}) {
       adm3RsData = {adm3RsData}
       imageCoord = {imageCoord}
       myBoundsAdm3 = {myBoundsAdm3}
+
+      adm1RsData ={adm1RsData}
+      adm2RsData = {adm2RsData}
+      adm3RsData = {adm2RsData}
+      showimage ={showimage}
+
+
 
       />
       
