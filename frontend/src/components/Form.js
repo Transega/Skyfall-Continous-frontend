@@ -30,7 +30,8 @@ const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
 
 
-const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef}) => {
+const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef,
+    adm1RsData, adm2RsData, adm3RsData, setadm1RsData, setadm2RsData, setadm3RsData}) => {
    const options = adm0Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -81,9 +82,9 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
  // use state for remote sensing data from GEE 
 
- const [adm1RsData, setadm1RsData] = useState({})
- const [adm2RsData, setadm2RsData] = useState({})
- const [adm3RsData, setadm3RsData] = useState({})
+//  const [adm1RsData, setadm1RsData] = useState({})
+//  const [adm2RsData, setadm2RsData] = useState({})
+//  const [adm3RsData, setadm3RsData] = useState({})
 
 
 
