@@ -46,7 +46,8 @@ const Form = ({adm0Array,
    setadm3RsData,
    setImageCoord,
    myBoundsAdm3,
-   setMyBoundsAdm3
+   setMyBoundsAdm3,
+   setshowimage
 }) => {
    const options = adm0Array.map((item) => {
       return (
@@ -394,6 +395,8 @@ useEffect(()=> {
 
          // console.log(adm1RsDataFromserver, 'adm1 rs')
          setadm1RsData(adm1RsDataFromserver)
+         
+         
 
          // Adm 2 RS data
          const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
@@ -408,18 +411,22 @@ useEffect(()=> {
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&ward='+Adm3)
 
+
           
          setadm3RsData(adm3RsDataFromserver)
+         setshowimage(true)
+         
 
 
       }
       
       getadm1RsData()
+      setshowimage(false)
 
 
  }
 
- console.log(adm3RsData, 'adm3');
+//  console.log(adm3RsData, 'adm3');
  
 
   return (
