@@ -60,13 +60,13 @@ export default function Card({adm0Array}) {
       mapRef ={ mapRef } 
       ADM2Geojson = {ADM2Geojson} 
       ADM3Geojson = {ADM3Geojson}
-      adm3RsData = {adm3RsData}
+      
       imageCoord = {imageCoord}
       myBoundsAdm3 = {myBoundsAdm3}
 
       adm1RsData ={adm1RsData}
       adm2RsData = {adm2RsData}
-      adm3RsData = {adm2RsData}
+      adm3RsData = {adm3RsData}
       showimage ={showimage}
 
 
