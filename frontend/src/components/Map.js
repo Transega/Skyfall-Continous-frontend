@@ -6,9 +6,21 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
 
-function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
+function MapDeck({
+  ADM1Geojson,
+  ADM2Geojson,
+  ADM3Geojson,
+  mapRef,
+  adm1RsData ,
+  adm2RsData ,
+  adm3RsData ,
+  imageCoord,
+  myBoundsAdm3
+   
 
- 
+}){
+
+
 
     const [viewState, setViewState] = useState({
         longitude: 36.543,
@@ -17,6 +29,14 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
     })
 
     // console.log(ADM1Geojson);
+    const Rasterlayers =
+      {
+        id: "r_tiles",
+        type: "raster",
+        source: 'ras_data',
+        paint :{}
+      }
+    
 
     const layerStyle = {
       id: 'point',
@@ -26,6 +46,9 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
       "fill-opacity": 0.5,
     }
     };
+
+    
+
   return (
 
     <Map ref={mapRef}
@@ -45,8 +68,12 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
         <Layer {...layerStyle} />
       </Source>
 
+  
+      
+      
+
         
-      <Marker longitude={36.543} latitude={0.453} color="red" />
+      
     </Map>
   )
 }

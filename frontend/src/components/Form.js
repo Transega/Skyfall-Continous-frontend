@@ -30,7 +30,24 @@ const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
 
 
-const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef}) => {
+const Form = ({adm0Array, 
+   setADM3Geojson, 
+   ADM1Geojson, 
+   ADM2Geojson,
+   ADM3Geojson,
+   setADM2Geojson,
+   setADM1Geojson,
+   mapRef,
+   adm1RsData,
+   adm2RsData,
+   adm3RsData,
+   setadm1RsData,
+   setadm2RsData,
+   setadm3RsData,
+   setImageCoord,
+   myBoundsAdm3,
+   setMyBoundsAdm3
+}) => {
    const options = adm0Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -81,9 +98,7 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
  // use state for remote sensing data from GEE 
 
- const [adm1RsData, setadm1RsData] = useState({})
- const [adm2RsData, setadm2RsData] = useState({})
- const [adm3RsData, setadm3RsData] = useState({})
+
 
 
 
@@ -208,6 +223,9 @@ useEffect(()=> {
         [minLng, minLat],
         [maxLng, maxLat]
       ])
+
+
+   
 }
 
    getAdm2()
@@ -234,10 +252,16 @@ useEffect(()=> {
         [maxLng, maxLat]
       ])
 
+      const myBoundsAdm3 = bbox(ADM3Geojson)
+
+      setMyBoundsAdm3(myBoundsAdm3)
+      
+
+    
    }
 
    getAdm3()
-  }, [Adm2,setADM3Geojson])
+  }, [Adm2,setADM3Geojson,myBoundsAdm3])
 
   // use this for admin 3 geojson
   useEffect(()=> {
@@ -324,7 +348,7 @@ useEffect(()=> {
       const res = await fetch(url)
       const data = await res.json()
 
-      console.log(data, 'success')
+      console.log(data.image_url, 'success')
       return data
  }
 
@@ -384,7 +408,7 @@ useEffect(()=> {
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&ward='+Adm3)
 
-         // console.log(adm3RsDataFromserver, 'adm3')
+          
          setadm3RsData(adm3RsDataFromserver)
 
 
@@ -394,8 +418,10 @@ useEffect(()=> {
 
 
  }
+
+ console.log(adm3RsData, 'adm3');
  
-      
+
   return (
      <StyledHeader>
         <Container>
