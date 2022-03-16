@@ -9,7 +9,7 @@ import mapboxgl from 'mapbox-gl';
 
 
 
-const SideBarMenu = ({ADM1Geojson, adm3RsData,mapRef}) => {
+const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage}) => {
   
 
 
@@ -22,7 +22,7 @@ const SideBarMenu = ({ADM1Geojson, adm3RsData,mapRef}) => {
       <Container>
     <Logo/>
     </Container>
-      <Chart/>
+      <Chart adm1RsData={adm1RsData} showimage={showimage}/>
       
   
       

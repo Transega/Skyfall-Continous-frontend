@@ -24,7 +24,7 @@ export default function Card({adm0Array}) {
   return (
     <Container>
           <Flex>
-    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm3RsData= {adm3RsData} mapRef={mapRef}/>
+    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}/>
     <StyledCard layout = "column">
       <Form 
       adm0Array = {adm0Array}
