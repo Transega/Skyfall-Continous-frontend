@@ -38,7 +38,7 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsD
         <Source
         id ="wms_source"
         type = "raster"
-        tiles ={[adm3RsData.image_url
+        tiles ={[adm1RsData.image_url
         ]}
         tileSize ={256}>
           <Layer 
@@ -68,12 +68,9 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsD
       <Source id="my-data" type="geojson" data={ADM3Geojson}>
         <Layer {...layerStyle} />
       </Source >
-
-      {test()}
-    
-     
       
       {/* <Source> </Source> */}
+      {test()}
 
         
       <Marker longitude={36.543} latitude={0.453} color="red" />
