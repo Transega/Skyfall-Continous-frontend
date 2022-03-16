@@ -68,6 +68,7 @@ export default function Card({adm0Array}) {
       adm2RsData = {adm2RsData}
       adm3RsData = {adm3RsData}
       showimage ={showimage}
+      
 
 
 
