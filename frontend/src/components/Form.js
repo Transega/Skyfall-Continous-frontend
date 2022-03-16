@@ -303,6 +303,7 @@ useEffect(()=> {
    }
 
     getAdm1()
+    setshowimage(false)
     
 
   }, [Adm1])
@@ -398,28 +399,27 @@ useEffect(()=> {
          
          
 
-         // Adm 2 RS data
-         const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
-         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&subcounty='+Adm2)
+         // // Adm 2 RS data
+         // const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         // +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         // '&end_date='+EndDate+'&subcounty='+Adm2)
 
-         // console.log(adm2RsDataFromserver, 'adm2 rs')
-         setadm2RsData(adm2RsDataFromserver)
+         // // console.log(adm2RsDataFromserver, 'adm2 rs')
+         // setadm2RsData(adm2RsDataFromserver)
 
-            // Adm 3 RS data 
-         const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
-         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&ward='+Adm3)
+         //    // Adm 3 RS data 
+         // const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         // +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         // '&end_date='+EndDate+'&ward='+Adm3)
 
 
           
-         setadm3RsData(adm3RsDataFromserver)
+         // setadm3RsData(adm3RsDataFromserver)
          setshowimage(true)
          
 
 
       }
-      
       getadm1RsData()
       setshowimage(false)
 
