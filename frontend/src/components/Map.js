@@ -1,7 +1,11 @@
 import React,{useState} from 'react';
 import Map, {Marker,Source, Layer} from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-//import * as mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
+
+// @ts-ignore
+    // eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
