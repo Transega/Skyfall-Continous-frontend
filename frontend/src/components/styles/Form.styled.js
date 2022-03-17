@@ -21,6 +21,11 @@ display:flex;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
 `;
 
+export const StyledInput = styled.div`
+display:flex;
+width: 150px
+
+`;
 export const Select = styled.select`
   width: 100%;
   

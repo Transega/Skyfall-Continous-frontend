@@ -1,5 +1,5 @@
 import React,{useState,useEffect, useCallback} from 'react'
-import { Select, StyledFormWrapper,StyledButton, StyledForm,Date} from './styles/Form.styled'
+import { Select, StyledFormWrapper,StyledButton, StyledForm,Date, StyledInput} from './styles/Form.styled'
 
 
 
@@ -294,11 +294,12 @@ useEffect(()=> {
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm1Json);
 
    // console.log(mapRef);
+   if(mapRef.current){
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
         [maxLng, maxLat]
-      ])
+      ])}
 
    }
 
@@ -478,28 +479,33 @@ useEffect(()=> {
 
    <Container>
     <StyledForm onSubmit={onsubmit}>
-
+    <StyledInput>
        <Select {...register('Platform')} onChange={onchangePlatform}>
           <option defaultValue="" hidden>Plaform</option>
           {customoptions(allowedPlatform)}
  
        </Select>
+       </StyledInput>
+       <StyledInput>
        <Select {...register('Sensor')} onChange={onchangeSensor}>
           <option defaultValue="" hidden>Sensor</option>
           {customoptions(allowedSensor)}
-          
+         
        </Select>
-
+       </StyledInput>
+         <StyledInput>
+         
        <Select {...register('Product')} onChange={onchangeProduct}>
           <option defaultValue="" hidden>Product</option>
           {customoptions(allowedProducts)}
           
        </Select>
+       </StyledInput>
       
        <Date>
        
-       <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
-       <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
+   <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
+     <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
        <StyledButton type="submit">Compute</StyledButton>
        </Date>
     </StyledForm>
