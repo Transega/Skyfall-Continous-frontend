@@ -39,21 +39,37 @@ function Chart({showimage, adm1RsData}) {
         ],
       });
 
+
+      // convert time stamp to human readable 
+
+      const humanReadableDate = (time)=> {
+        var date = new Date(time);
+          
+        var Day = date.getDate().toString().length ==2 ? date.getDate() : `0${date.getDate()}`
+
+
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        var formatedMonth = month.toString().length ==2 ? month : `0${month}`
+        // console.log(date, month,Day, 'y', year)
+
+        
+        //template string
+
+        var actualDate = `${Day}-${formatedMonth}-${year}`
+
+        return actualDate
+      }
+
      const newChart = () =>{
-        const rsChart = [
-          {
-              "Time": 1617264611524,
-              "NDVI": 0.4804017856942116
-          },
-          {
-              "Time": 1617264608338,
-              "NDVI": 0.48811391852795977
-          }]
+
+      
           const dynamicdata = adm1RsData.time_series
+
           const the_chart = {
 
       
-            labels: dynamicdata.map((data) => data.Time),
+            labels: dynamicdata.map((data) => humanReadableDate(data.Time)),
             datasets: [
               {
                 label: "NDVI TREND",
