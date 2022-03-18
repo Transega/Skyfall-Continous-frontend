@@ -23,7 +23,7 @@ display:flex;
 
 export const StyledInput = styled.div`
 display:flex;
-width: 150px
+width: 120px
 
 `;
 export const Select = styled.select`

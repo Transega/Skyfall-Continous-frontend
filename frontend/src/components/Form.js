@@ -212,6 +212,7 @@ const onchangeProduct = (e) => {
 
 useEffect(()=> {
    const getAdm2 = async () => {
+      try{
    const subcountyList = await fetchData(adm2Namesurl+Adm1)
    setadm2Array(subcountyList['sub_counties'])
    // get shapefile json from server 
@@ -220,14 +221,16 @@ useEffect(()=> {
 
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm2GeoJson);
 
-
+      
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
         [maxLng, maxLat]
       ])
 
-
+   }catch(error){
+      console.log(error);
+   }
    
 }
 
@@ -239,6 +242,7 @@ useEffect(()=> {
 // adm 3  use effect 
 useEffect(()=> {
    const getAdm3 = async () => {
+      try{
    const wardsList = await fetchData(adm3Namesurl+Adm2)
    setadm3Array(wardsList['Wards'])
    // get shapefile json from server 
@@ -259,7 +263,9 @@ useEffect(()=> {
 
       setMyBoundsAdm3(myBoundsAdm3)
       
-
+   }catch(error){
+      console.log(error)
+   }
     
    }
 
@@ -268,16 +274,22 @@ useEffect(()=> {
 
   // use this for admin 3 geojson
   useEffect(()=> {
+    
    const getAdm3geojson = async () => {
+      try{
+        
+ 
    
    // get shapefile json from server 
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
    // console.log('test')
    setADM3Geojson(ADM3Geojson)
+}catch(error){
+   console.log(error);
+}
 
 
-
-   }
+   }     
 
    getAdm3geojson()
   }, [Adm3,setADM3Geojson])
@@ -286,6 +298,7 @@ useEffect(()=> {
 
 useEffect(()=> {
    const getAdm1 = async () => {
+      try{
    const Adm1fromsever = await fetchAdm1()
    setadm1Array(Adm1fromsever['counties'])
    // get shapefile  json from server 
@@ -294,16 +307,20 @@ useEffect(()=> {
    setADM1Geojson(Adm1Json)
 
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm1Json);
-
+console.log(bbox(Adm1Json));
    // console.log(mapRef);
-   if(mapRef.current){
+   if(bbox(Adm1Json)[0]!=='Infinity'){
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
         [maxLng, maxLat]
       ])}
 
-   }
+   }catch(error){
+      console.log(error);
+} 
+
+}
 
     getAdm1()
     setshowimage(false)
