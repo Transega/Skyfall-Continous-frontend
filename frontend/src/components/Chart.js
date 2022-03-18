@@ -37,7 +37,7 @@ function Chart({showimage, adm1RsData}) {
             borderWidth: 2,
           },
         ],
-      });
+      },[adm1RsData]);
 
 
       // convert time stamp to human readable 

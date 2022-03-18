@@ -2,7 +2,7 @@
 
 export const NdviData = [
     {
-        "Time": 0,
-        "NDVI": 0
+        "Time": '',
+        "NDVI": ''
     }
 ]
