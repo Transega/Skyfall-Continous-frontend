@@ -11,6 +11,8 @@ import { StyledHeader } from './styles/Header.styled';
 import { Nav } from './styles/Header.styled';
 import { StyledUl } from './styles/Header.styled';
 import bbox from '@turf/bbox';
+
+import axios from 'axios';
 // import MapDeck from './Map';
 
 // import Card from './Card';
@@ -365,10 +367,11 @@ console.log(bbox(Adm1Json));
 
  const fetchRemoteSensingData = async (url) => {
 
-      const res = await fetch(url)
-      const data = await res.json()
+      const res = await axios.get(url)
+      
+      const data =  res.data
 
-      console.log(data.image_url, 'success')
+      console.log(data, 'success')
       return data
  }
 
@@ -408,11 +411,20 @@ console.log(bbox(Adm1Json));
 
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
          //  Admin 1 RS data
+
+         
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&county='+Adm1)
 
-         // console.log(adm1RsDataFromserver, 'adm1 rs')
+         console.log('test')
+         //  destructure time series
+         const {time_series} = adm1RsDataFromserver
+
+         const timedata =  time_series.filter((i)=> i.NDVI !== NaN)
+         console.log(timedata)
+      
+
          setadm1RsData(adm1RsDataFromserver)
          
          
@@ -439,12 +451,12 @@ console.log(bbox(Adm1Json));
 
       }
       getadm1RsData()
-      setshowimage(false)
+      // setshowimage(false)
 
 
  }
 
-//  console.log(adm3RsData, 'adm3');
+
  
 
   return (
