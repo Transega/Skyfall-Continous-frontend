@@ -110,6 +110,7 @@ function Chart({showimage, adm1RsData}) {
           
           
           </ChartStyled>
+        
       );
 }
 

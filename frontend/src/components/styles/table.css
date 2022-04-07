@@ -1,0 +1,14 @@
+.Table {
+  color: rgb(0, 225, 255);
+  border-collapse: collapse;
+  width: 100%;
+  /* margin-top: ; */
+  margin-bottom: auto;
+}
+
+td,
+th {
+  border: 1px solid #dddddddd;
+  text-align: left;
+  padding: 8px;
+}
