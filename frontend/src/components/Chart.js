@@ -60,7 +60,7 @@ function Chart({showimage, adm1RsData}) {
         var actualDate = `${Day}-${formatedMonth}-${year}`
 
       } else {
-        actualDate = time
+        actualDate = 'Average Season'
       }
         
 
