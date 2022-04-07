@@ -43,6 +43,7 @@ function Chart({showimage, adm1RsData}) {
       // convert time stamp to human readable 
 
       const humanReadableDate = (time)=> {
+      if (time !=='SeasonNDVI'){
         var date = new Date(time);
           
         var Day = date.getDate().toString().length ==2 ? date.getDate() : `0${date.getDate()}`
@@ -57,6 +58,11 @@ function Chart({showimage, adm1RsData}) {
         //template string
 
         var actualDate = `${Day}-${formatedMonth}-${year}`
+
+      } else {
+        actualDate = time
+      }
+        
 
         return actualDate
       }
