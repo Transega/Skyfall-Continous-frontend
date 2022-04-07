@@ -27,9 +27,10 @@ const adm1geoJsonurl = baseurlshp+'/get_adm1_shapefile/?Get_county='
 const adm2geoJsonurl = baseurlshp+'/get_adm2_shapefile/?sub_county='
 const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 
-// url for remote sensing data 
+// url for remote sensing data  http://localhost:8100
 
-const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
+// const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/' 
+const rsapiurl = 'http://localhost:8100/RemotesensingApi/get_rsAdmi1/'
 
 
 const Form = ({adm0Array, 
