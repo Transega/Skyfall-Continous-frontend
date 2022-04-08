@@ -20,11 +20,13 @@ export default function Card({adm0Array}) {
   const [myBoundsAdm3,setMyBoundsAdm3] = useState([])
   const [imageCoord, setImageCoord] = useState([])
   const [showimage, setshowimage] = useState(false)
+  const [productSelected, setproductSelected] = useState('')
 
   return (
     <Container>
           <Flex>
-    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}/>
+    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
+    productSelected={productSelected}/>
     <StyledCard layout = "column">
       <Form 
       adm0Array = {adm0Array}
@@ -45,6 +47,10 @@ export default function Card({adm0Array}) {
       myBoundsAdm3 = {myBoundsAdm3}
       setMyBoundsAdm3 = {setMyBoundsAdm3}
       setshowimage ={setshowimage}
+      productSelected={productSelected}
+      setproductSelected={setproductSelected}
+
+
    
    
 
