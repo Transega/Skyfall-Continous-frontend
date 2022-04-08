@@ -50,7 +50,9 @@ const Form = ({adm0Array,
    setImageCoord,
    myBoundsAdm3,
    setMyBoundsAdm3,
-   setshowimage
+   setshowimage,
+
+
 }) => {
    const options = adm0Array.map((item) => {
       return (
