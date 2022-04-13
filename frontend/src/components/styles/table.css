@@ -36,3 +36,9 @@ th {
   align-items: center;
   height: 350px;
 }
+.spinner-text {
+  text-align: justify;
+  text-decoration-color: aqua;
+  color: rgb(0, 225, 255);
+  /* margin-right: 70%; */
+}
