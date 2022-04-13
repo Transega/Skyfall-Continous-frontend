@@ -51,6 +51,7 @@ const Form = ({adm0Array,
    myBoundsAdm3,
    setMyBoundsAdm3,
    setshowimage,
+   setIsLoading,
 
 
 }) => {
@@ -414,6 +415,7 @@ console.log(bbox(Adm1Json));
 
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
          //  Admin 1 RS data
+         setIsLoading(true)
 
          
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
@@ -429,6 +431,7 @@ console.log(bbox(Adm1Json));
       
 
          setadm1RsData(adm1RsDataFromserver)
+         setIsLoading(false)
          
          
 
