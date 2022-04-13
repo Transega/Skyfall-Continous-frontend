@@ -1,5 +1,5 @@
 import React,{useState,useEffect, useCallback} from 'react'
-import { Select, StyledFormWrapper,StyledButton, StyledForm,Date} from './styles/Form.styled'
+import { Select, StyledFormWrapper,StyledButton, StyledForm,Date, StyledInput} from './styles/Form.styled'
 
 
 
@@ -11,6 +11,8 @@ import { StyledHeader } from './styles/Header.styled';
 import { Nav } from './styles/Header.styled';
 import { StyledUl } from './styles/Header.styled';
 import bbox from '@turf/bbox';
+
+import axios from 'axios';
 // import MapDeck from './Map';
 
 // import Card from './Card';
@@ -25,13 +27,34 @@ const adm1geoJsonurl = baseurlshp+'/get_adm1_shapefile/?Get_county='
 const adm2geoJsonurl = baseurlshp+'/get_adm2_shapefile/?sub_county='
 const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 
-// url for remote sensing data 
+// url for remote sensing data  http://localhost:8100
 
-const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
+const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/' 
+// const rsapiurl = 'http://localhost:8100/RemotesensingApi/get_rsAdmi1/'
 
 
-const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,setADM2Geojson,setADM1Geojson,mapRef,
-    adm1RsData, adm2RsData, adm3RsData, setadm1RsData, setadm2RsData, setadm3RsData}) => {
+const Form = ({adm0Array, 
+   setADM3Geojson, 
+   ADM1Geojson, 
+   ADM2Geojson,
+   ADM3Geojson,
+   setADM2Geojson,
+   setADM1Geojson,
+   mapRef,
+   adm1RsData,
+   adm2RsData,
+   adm3RsData,
+   setadm1RsData,
+   setadm2RsData,
+   setadm3RsData,
+   setImageCoord,
+   myBoundsAdm3,
+   setMyBoundsAdm3,
+   setshowimage,
+   setIsLoading,
+
+
+}) => {
    const options = adm0Array.map((item) => {
       return (
          <option key={item} value={item}> 
@@ -82,9 +105,6 @@ const Form = ({adm0Array, setADM3Geojson, ADM1Geojson, ADM2Geojson,ADM3Geojson,s
 
  // use state for remote sensing data from GEE 
 
-//  const [adm1RsData, setadm1RsData] = useState({})
-//  const [adm2RsData, setadm2RsData] = useState({})
-//  const [adm3RsData, setadm3RsData] = useState({})
 
 
 
@@ -195,6 +215,7 @@ const onchangeProduct = (e) => {
 
 useEffect(()=> {
    const getAdm2 = async () => {
+      try{
    const subcountyList = await fetchData(adm2Namesurl+Adm1)
    setadm2Array(subcountyList['sub_counties'])
    // get shapefile json from server 
@@ -203,12 +224,17 @@ useEffect(()=> {
 
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm2GeoJson);
 
-
+      
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
         [maxLng, maxLat]
       ])
+
+   }catch(error){
+      console.log(error);
+   }
+   
 }
 
    getAdm2()
@@ -219,6 +245,7 @@ useEffect(()=> {
 // adm 3  use effect 
 useEffect(()=> {
    const getAdm3 = async () => {
+      try{
    const wardsList = await fetchData(adm3Namesurl+Adm2)
    setadm3Array(wardsList['Wards'])
    // get shapefile json from server 
@@ -235,23 +262,37 @@ useEffect(()=> {
         [maxLng, maxLat]
       ])
 
+      const myBoundsAdm3 = bbox(ADM3Geojson)
+
+      setMyBoundsAdm3(myBoundsAdm3)
+      
+   }catch(error){
+      console.log(error)
+   }
+    
    }
 
    getAdm3()
-  }, [Adm2,setADM3Geojson])
+  }, [Adm2,setADM3Geojson,myBoundsAdm3])
 
   // use this for admin 3 geojson
   useEffect(()=> {
+    
    const getAdm3geojson = async () => {
+      try{
+        
+ 
    
    // get shapefile json from server 
    const ADM3Geojson = await fetchJson(adm3geoJsonurl+Adm3)
    // console.log('test')
    setADM3Geojson(ADM3Geojson)
+}catch(error){
+   console.log(error);
+}
 
 
-
-   }
+   }     
 
    getAdm3geojson()
   }, [Adm3,setADM3Geojson])
@@ -260,6 +301,7 @@ useEffect(()=> {
 
 useEffect(()=> {
    const getAdm1 = async () => {
+      try{
    const Adm1fromsever = await fetchAdm1()
    setadm1Array(Adm1fromsever['counties'])
    // get shapefile  json from server 
@@ -268,17 +310,23 @@ useEffect(()=> {
    setADM1Geojson(Adm1Json)
 
    const [minLng, minLat, maxLng, maxLat] = bbox(Adm1Json);
-
+console.log(bbox(Adm1Json));
    // console.log(mapRef);
+   if(bbox(Adm1Json)[0]!=='Infinity'){
    mapRef.current.fitBounds(
       [
         [minLng, minLat],
         [maxLng, maxLat]
-      ])
+      ])}
 
-   }
+   }catch(error){
+      console.log(error);
+} 
+
+}
 
     getAdm1()
+    setshowimage(false)
     
 
   }, [Adm1])
@@ -322,8 +370,9 @@ useEffect(()=> {
 
  const fetchRemoteSensingData = async (url) => {
 
-      const res = await fetch(url)
-      const data = await res.json()
+      const res = await axios.get(url)
+      
+      const data =  res.data
 
       console.log(data, 'success')
       return data
@@ -365,45 +414,59 @@ useEffect(()=> {
 
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
          //  Admin 1 RS data
+         setIsLoading(true)
+
+         
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
          '&end_date='+EndDate+'&county='+Adm1)
 
-         // console.log(adm1RsDataFromserver, 'adm1 rs')
+         console.log('test')
+         //  destructure time series
+         const {time_series} = adm1RsDataFromserver
+
+         const timedata =  time_series.filter((i)=> i.NDVI !== NaN)
+         console.log(timedata)
+      
+
          setadm1RsData(adm1RsDataFromserver)
+         setIsLoading(false)
+         
+         
 
-         // Adm 2 RS data
-         const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
-         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&subcounty='+Adm2)
+         // // Adm 2 RS data
+         // const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         // +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         // '&end_date='+EndDate+'&subcounty='+Adm2)
 
-         // console.log(adm2RsDataFromserver, 'adm2 rs')
-         setadm2RsData(adm2RsDataFromserver)
+         // // console.log(adm2RsDataFromserver, 'adm2 rs')
+         // setadm2RsData(adm2RsDataFromserver)
 
-            // Adm 3 RS data 
-         const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
-         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&ward='+Adm3)
+         //    // Adm 3 RS data 
+         // const adm3RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         // +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         // '&end_date='+EndDate+'&ward='+Adm3)
 
-         // console.log(adm3RsDataFromserver, 'adm3')
-         setadm3RsData(adm3RsDataFromserver)
+
+          
+         // setadm3RsData(adm3RsDataFromserver)
+         setshowimage(true)
+         
 
         
 
 
 
       }
-      
       getadm1RsData()
-      //  Reset the form 
-      setAdm1(null)
-      setAdm2(null)
-      setAdm3(null)
+      // setshowimage(false)
 
 
  }
+
+
  
-      
+
   return (
      <StyledHeader>
         <Container>
@@ -453,28 +516,33 @@ useEffect(()=> {
 
    <Container>
     <StyledForm onSubmit={onsubmit}>
-
+    <StyledInput>
        <Select {...register('Platform')} onChange={onchangePlatform}>
           <option defaultValue="" hidden>Plaform</option>
           {customoptions(allowedPlatform)}
  
        </Select>
+       </StyledInput>
+       <StyledInput>
        <Select {...register('Sensor')} onChange={onchangeSensor}>
           <option defaultValue="" hidden>Sensor</option>
           {customoptions(allowedSensor)}
-          
+         
        </Select>
-
+       </StyledInput>
+         <StyledInput>
+         
        <Select {...register('Product')} onChange={onchangeProduct}>
           <option defaultValue="" hidden>Product</option>
           {customoptions(allowedProducts)}
           
        </Select>
+       </StyledInput>
       
        <Date>
        
-       <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
-       <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
+   <input label= 'Start-Date' type="date" {...register('Start-date')} onChange={e=>setStartDate(e.target.value)}/>
+     <input label= 'Start-Date' type="date" {...register('End-date')} onChange={e=>setEndDate(e.target.value)}/>
        <StyledButton type="submit">Compute</StyledButton>
        </Date>
     </StyledForm>

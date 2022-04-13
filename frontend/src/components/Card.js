@@ -5,6 +5,7 @@ import SideBarMenu from './SideBarMenu'
 import { Container } from './styles/Container.styled'
 import { Flex } from './styles/Flex.styled'
 import react,{useState,useRef } from 'react'
+import LoadingSpinner from './Spinner'
 
 export default function Card({adm0Array}) {
 
@@ -13,17 +14,22 @@ export default function Card({adm0Array}) {
   const [ADM2Geojson, setADM2Geojson] = useState({})
   const [ADM3Geojson, setADM3Geojson] = useState({})
 
+  const mapRef = useRef();
+
   const [adm1RsData, setadm1RsData] = useState({})
   const [adm2RsData, setadm2RsData] = useState({})
   const [adm3RsData, setadm3RsData] = useState({})
-
-  const mapRef = useRef();
-
+  const [myBoundsAdm3,setMyBoundsAdm3] = useState([])
+  const [imageCoord, setImageCoord] = useState([])
+  const [showimage, setshowimage] = useState(false)
+  const [productSelected, setproductSelected] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Container>
           <Flex>
-    <SideBarMenu ADM1Geojson ={ADM1Geojson}/>
+    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
+    productSelected={productSelected}/>
     <StyledCard layout = "column">
       <Form 
       adm0Array = {adm0Array}
@@ -41,16 +47,46 @@ export default function Card({adm0Array}) {
       setadm2RsData = {setadm2RsData}
       setadm3RsData = {setadm3RsData}
       mapRef ={ mapRef }
-
-
-
-
-      
-      
-      
+      imageCoord = {imageCoord}
+      myBoundsAdm3 = {myBoundsAdm3}
+      setMyBoundsAdm3 = {setMyBoundsAdm3}
+      setshowimage ={setshowimage}
+      productSelected={productSelected}
+      setproductSelected={setproductSelected}
+      setIsLoading={setIsLoading}
       
       />
-      <MapDeck ADM1Geojson ={ADM1Geojson} mapRef ={ mapRef } ADM2Geojson = {ADM2Geojson} ADM3Geojson = {ADM3Geojson}/>
+      {/* <MapDeck ADM1Geojson ={ADM1Geojson} 
+      mapRef ={ mapRef } 
+      ADM2Geojson = {ADM2Geojson} 
+      ADM3Geojson = {ADM3Geojson}
+      
+      imageCoord = {imageCoord}
+      myBoundsAdm3 = {myBoundsAdm3}
+
+      adm1RsData ={adm1RsData}
+      adm2RsData = {adm2RsData}
+      adm3RsData = {adm3RsData}
+      showimage ={showimage}
+      
+      /> */}
+      {isLoading ? <LoadingSpinner /> : <MapDeck ADM1Geojson ={ADM1Geojson} 
+      mapRef ={ mapRef } 
+      ADM2Geojson = {ADM2Geojson} 
+      ADM3Geojson = {ADM3Geojson}
+      
+      imageCoord = {imageCoord}
+      myBoundsAdm3 = {myBoundsAdm3}
+
+      adm1RsData ={adm1RsData}
+      adm2RsData = {adm2RsData}
+      adm3RsData = {adm3RsData}
+      showimage ={showimage}
+      isLoading={isLoading}
+
+      
+      />}
+      {/* <LoadingSpinner/> */}
       
     </StyledCard>
     </Flex>

@@ -1,19 +1,23 @@
 import React,{useState} from 'react';
 import Map, {Marker,Source, Layer} from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-//import * as mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
+
+// @ts-ignore
+    // eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
 
-function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
+function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsData,adm3RsData,showimage,isLoading}){
 
  
 
     const [viewState, setViewState] = useState({
         longitude: 36.543,
         latitude: 0.453,
-        zoom: 10
+        zoom: 6
     })
 
     // console.log(ADM1Geojson);
@@ -26,6 +30,30 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
       "fill-opacity": 0.5,
     }
     };
+    
+    const test = () => {
+
+      
+      
+      if (showimage === true) {
+        console.log(adm1RsData.image_url, 'rsdata')
+      return (
+
+        <Source
+        id ="wms_source"
+        type = "raster"
+        tiles ={[adm1RsData.image_url[0]['imageurl']
+        ]}
+        tileSize ={256}>
+          <Layer 
+          id= "ras_id"
+          type ="raster"
+          source ="wms_source"
+          />
+      </Source>
+
+      )}
+    }
   return (
 
     <Map ref={mapRef}
@@ -43,10 +71,15 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef}){
       </Source>
       <Source id="my-data" type="geojson" data={ADM3Geojson}>
         <Layer {...layerStyle} />
-      </Source>
+      </Source >
+      
+      {/* <Source> </Source> */}
+      {test()}
 
         
-      <Marker longitude={36.543} latitude={0.453} color="red" />
+      {/* <Marker longitude={36.543} latitude={0.453} color="red" /> */}
+
+
     </Map>
   )
 }
