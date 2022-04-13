@@ -5,6 +5,7 @@ import SideBarMenu from './SideBarMenu'
 import { Container } from './styles/Container.styled'
 import { Flex } from './styles/Flex.styled'
 import react,{useState,useRef } from 'react'
+import LoadingSpinner from './Spinner'
 
 export default function Card({adm0Array}) {
 
@@ -21,6 +22,7 @@ export default function Card({adm0Array}) {
   const [imageCoord, setImageCoord] = useState([])
   const [showimage, setshowimage] = useState(false)
   const [productSelected, setproductSelected] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Container>
@@ -49,20 +51,10 @@ export default function Card({adm0Array}) {
       setshowimage ={setshowimage}
       productSelected={productSelected}
       setproductSelected={setproductSelected}
-
-
-   
-   
-
-
-
-
-      
-      
-      
+      setIsLoading={setIsLoading}
       
       />
-      <MapDeck ADM1Geojson ={ADM1Geojson} 
+      {/* <MapDeck ADM1Geojson ={ADM1Geojson} 
       mapRef ={ mapRef } 
       ADM2Geojson = {ADM2Geojson} 
       ADM3Geojson = {ADM3Geojson}
@@ -75,10 +67,24 @@ export default function Card({adm0Array}) {
       adm3RsData = {adm3RsData}
       showimage ={showimage}
       
+      /> */}
+      {isLoading ? <LoadingSpinner /> : <MapDeck ADM1Geojson ={ADM1Geojson} 
+      mapRef ={ mapRef } 
+      ADM2Geojson = {ADM2Geojson} 
+      ADM3Geojson = {ADM3Geojson}
+      
+      imageCoord = {imageCoord}
+      myBoundsAdm3 = {myBoundsAdm3}
 
+      adm1RsData ={adm1RsData}
+      adm2RsData = {adm2RsData}
+      adm3RsData = {adm3RsData}
+      showimage ={showimage}
+      isLoading={isLoading}
 
-
-      />
+      
+      />}
+      {/* <LoadingSpinner/> */}
       
     </StyledCard>
     </Flex>
