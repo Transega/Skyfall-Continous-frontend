@@ -10,14 +10,14 @@ mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worke
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
 
-function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsData,adm3RsData,showimage}){
+function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsData,adm3RsData,showimage,isLoading}){
 
  
 
     const [viewState, setViewState] = useState({
         longitude: 36.543,
         latitude: 0.453,
-        zoom: 10
+        zoom: 6
     })
 
     // console.log(ADM1Geojson);
@@ -77,7 +77,7 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsD
       {test()}
 
         
-      <Marker longitude={36.543} latitude={0.453} color="red" />
+      {/* <Marker longitude={36.543} latitude={0.453} color="red" /> */}
 
 
     </Map>
