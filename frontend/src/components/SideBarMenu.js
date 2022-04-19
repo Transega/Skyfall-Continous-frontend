@@ -10,19 +10,12 @@ import customtable from './customtable';
 // import table from '.styles/table.css'
 
 import customstyle from './styles/table.css'
+import cropSelection from './cropSelection';
 
 
 
  
-const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected}) => {
-
-
-  // var it = ["cat","dog","chicken","pig"].sort().reduce(
-  //   (acc, item, i, arr) => acc.concat(
-  //     arr.slice(i + 1).map(_item => [item, _item])
-  //   ),
-  // [])
-  // console.log(it)
+const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, props}) => {
 
   const [NdviData, setNdviData] = useState([
     {
@@ -34,6 +27,14 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected}
         "NDVI": 0.48811391852795977
     }]) 
 
+
+    // array of crops 
+    const [Crops, SetCrops] = useState(['Maize'])
+    // array of crop stages 
+    const [CropStages, setCropStages] = useState(['Emergence', 'Maturity', 'Harvesting'])
+
+    const [CropSelected, setCropSelected] = useState('')
+    const [CropStageSelected, setCropStageSelected] = useState('')
 
 //     useEffect(()=> {
 //       if ( Object.keys(adm1RsData).length !== 0){
@@ -72,6 +73,7 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected}
         //template string
 
         var actualDate = `${Day}-${formatedMonth}-${year}`
+        
 
       } else {
         actualDate = "Period Average"
@@ -111,6 +113,40 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected}
 
   }
 
+
+// Track changes on crop selcetion 
+
+const cropChanges =(e) => {
+  let newValue = e.target.value;
+  setCropSelected(newValue);
+  // console.log(Adm0, 'adm0..')
+  
+  }
+
+  // Track changes on stage selcetion 
+
+const cropStageChanges =(e) => {
+  let newValue = e.target.value;
+  setCropStageSelected(newValue);
+  // console.log(Adm0, 'adm0..')
+  
+  }
+
+
+
+// iterate over a list of items to provide options to the user for selection 
+const customoptions = (anArray) =>{
+  var opt = anArray.map((item) => {
+     return (
+        <option key={item} value={item}> 
+        {item}
+        </option>
+     )
+  })
+return opt
+  
+}
+
   
 
 
@@ -124,7 +160,20 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected}
     <Logo/>
     </Container>
       <Chart adm1RsData={adm1RsData} showimage={showimage} productSelected={productSelected}/>
+      
       <div className='Table'>
+      <div className='Crop-health'> 
+      <select onChange={cropChanges}>
+                <option value={null}>Crop</option>
+               {customoptions(Crops)}
+      </select>
+      <select onChange={cropStageChanges}>
+                <option value={null}>Stage/Period</option>
+               {customoptions(CropStages)}
+      </select>
+      </div> 
+      
+        
      <table>
        <tr>
          <th>StartDate</th>
