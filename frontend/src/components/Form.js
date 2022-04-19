@@ -382,7 +382,7 @@ console.log(bbox(Adm1Json));
  const onsubmit = (e) => {
    e.preventDefault()
    // validate selections
-      if (!Adm1 & ! Adm1!=='Adm1'){
+      if (!Adm1 && ! Adm1!=='Adm1'){
          alert('please make Admin level selections')
          return
       }
