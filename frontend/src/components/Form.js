@@ -52,6 +52,7 @@ const Form = ({adm0Array,
    setMyBoundsAdm3,
    setshowimage,
    setIsLoading,
+   setErrorMessage,
 
 
 }) => {
@@ -420,18 +421,23 @@ console.log(bbox(Adm1Json));
          
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&county='+Adm1)
+         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+            setadm1RsData(data)
+            setIsLoading(false)
 
-         console.log('test')
-         //  destructure time series
-         const {time_series} = adm1RsDataFromserver
+         }).catch(()=>{
+            setErrorMessage("Unable to fetch data from Server");
+            alert("Unable to fetch data from Server Please select different dates and Try again")
+            setIsLoading(false)
 
-         const timedata =  time_series.filter((i)=> i.NDVI !== NaN)
-         console.log(timedata)
+
+         })
+
+      
+        
       
 
-         setadm1RsData(adm1RsDataFromserver)
-         setIsLoading(false)
+       
          
          
 

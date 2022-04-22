@@ -23,6 +23,7 @@ export default function Card({adm0Array}) {
   const [showimage, setshowimage] = useState(false)
   const [productSelected, setproductSelected] = useState('')
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   return (
     <Container>
@@ -52,6 +53,7 @@ export default function Card({adm0Array}) {
       productSelected={productSelected}
       setproductSelected={setproductSelected}
       setIsLoading={setIsLoading}
+      setErrorMessage={setErrorMessage}
       
       />
       {/* <MapDeck ADM1Geojson ={ADM1Geojson} 
