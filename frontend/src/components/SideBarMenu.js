@@ -15,7 +15,7 @@ import cropSelection from './cropSelection';
 
 
  
-const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, props}) => {
+const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, Adm0}) => {
 
   // const [NdviData, setNdviData] = useState([
   //   {
@@ -31,32 +31,48 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
     ['2021-03-01', '2021-04-30', 'Emergence', 'Good'],
     ['2021-05-01', '2023-08-30', 'Maturity', 'Average'],
     ['2021-09-01', '2021-10-31', 'Harvest', 'Average'],
-    ['2021-09-01', '2021-10-31', 'Harvest', 'Average'],
-    ['2021-09-01', '2021-10-31', 'Harvest', 'Average']]) 
+    ]) 
 
 
     // array of crops 
-    const [Crops, SetCrops] = useState(['Maize'])
+    const [Crops, SetCrops] = useState([])
     // array of crop stages 
     const [CropStages, setCropStages] = useState(['Emergence', 'Maturity', 'Harvesting'])
 
     const [CropSelected, setCropSelected] = useState('')
     const [CropStageSelected, setCropStageSelected] = useState('')
+    const [country, setcountry] = useState('Kenya')
 
-//     useEffect(()=> {
-//       if ( Object.keys(adm1RsData).length !== 0){
+    const cropCalenderUrl = 'http://208.85.21.253:8080/CropCalenderApi/'
+    
 
-//         setNdviData(adm1RsData.time_series)
-//       }
+   
+    
+   
+
+  // fecth crop list 
+  // cropCalenderUrl+'getCrops/?country='+country
+  const fetchCropCalendaData = async (url) => {
+    const res = await fetch(url)
+    const data = await res.json()
+    return data  
+  }
+
+
+   useEffect(()=> {
+   
+      const getCroplist = async () =>{
+        const CroplistFromServer = await fetchCropCalendaData(cropCalenderUrl+'getCrops/?country='+country)
+        
+        SetCrops(CroplistFromServer['Crops'])
+        
+      }
+      getCroplist()
+
     
       
    
-//      }, [adm1RsData, SelectedProduct])
-  
-
-// }
-    
-
+     }, [])
 
   
 
@@ -64,7 +80,7 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
 
 
     
-    const humanReadableDate = (time)=> {
+     const humanReadableDate = (time)=> {
       if (time !=='SeasonNDVI'){
         var date = new Date(time);
           
@@ -81,14 +97,16 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
 
         var actualDate = `${Day}-${formatedMonth}-${year}`
 
-
       } else {
         actualDate = "Period Average"
       }
-      if (time ==="SeasonNDMI"){
+      if (time === "SeasonNDMI"){
         actualDate = "Period Average"
       }
-      
+      if (time ==="SeasonUrl"){
+        actualDate = "Period Average"
+
+      }
         
 
         return actualDate
@@ -101,9 +119,9 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
     //  const test = item.map((data)=>{
 
         
-      if (Object.keys(adm1RsData).length !== 0){
+      if (Object.keys(adm1RsData).length !== 0 && CropSelected){
         // NdviData = adm1RsData.time_series
-        // console.log(data)
+        
 
       return (
 
@@ -148,10 +166,12 @@ const cropChanges =(e) => {
 
   // Track changes on stage selcetion 
 
-const cropStageChanges =(e) => {
+const ImageDateChanges =(e) => {
   let newValue = e.target.value;
+  console.log(newValue)
   setCropStageSelected(newValue);
-  // console.log(Adm0, 'adm0..')
+
+  
   
   }
 
@@ -163,6 +183,19 @@ const customoptions = (anArray) =>{
      return (
         <option key={item} value={item}> 
         {item}
+        </option>
+     )
+  })
+return opt
+  
+}
+
+// use this function to change images on the map
+const imageoptions = (anArray) =>{
+  var opt = anArray.map((item) => {
+     return (
+        <option key={humanReadableDate(item.Time)} value={item.imageurl}> 
+        {humanReadableDate(item.Time)}
         </option>
      )
   })
@@ -187,22 +220,24 @@ return opt
       <div className='Table'>
       <div className='Crop-health'> 
       <select onChange={cropChanges}>
-                <option value={null}>Crop</option>
+                <option defaultValue="" hidden>Crop</option>
                {customoptions(Crops)}
       </select>
-      <select onChange={cropStageChanges}>
-                <option value={null}>Image Date</option>
-               {customoptions(CropStages)}
+       
+      <select onChange={ImageDateChanges}>
+                <option defaultValue="" hidden>Date Image</option>
+              {Object.keys(adm1RsData).length !== 0 ? imageoptions(adm1RsData['image_url']) : <></>} 
       </select>
       </div> 
       
-        
+    {/* <table></table> */}
+    
      <table>
        <tr>
          <th>StartDate</th>
          <th>EndDate</th>
          <th>Stage</th>
-         <th>Crop Condition</th>
+         <th>Crop</th>
        </tr>
       
          {DateData(NdviData)}
