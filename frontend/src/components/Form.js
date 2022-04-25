@@ -33,7 +33,10 @@ const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
 // const rsapiurl = 'http://localhost:8100/RemotesensingApi/get_rsAdmi1/'
 
 
-const Form = ({adm0Array, 
+const Form = ({
+   Adm0,
+   setAdm0,
+   adm0Array, 
    setADM3Geojson, 
    ADM1Geojson, 
    ADM2Geojson,
@@ -90,7 +93,7 @@ const Form = ({adm0Array,
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('');
    const [EndDate, setEndDate] = useState('');
-   const [Adm0, setAdm0] = useState(null)
+   
    const [Adm1, setAdm1] = useState(null)
    const [Adm2, setAdm2] = useState(null)
    const [Adm3, setAdm3] = useState(null)
