@@ -3,6 +3,7 @@
   border-collapse: collapse;
   width: 100%;
   overflow: auto;
+  overflow-x: auto;
   /* margin-top: ; */
   margin-bottom: auto;
 }
