@@ -17,15 +17,22 @@ import cropSelection from './cropSelection';
  
 const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, props}) => {
 
-  const [NdviData, setNdviData] = useState([
-    {
-        "Time": 1617264611524,
-        "NDVI": 0.4804017856942116
-    },
-    {
-        "Time": 1617264608338,
-        "NDVI": 0.48811391852795977
-    }]) 
+  // const [NdviData, setNdviData] = useState([
+  //   {
+  //       "Time": 1617264611524,
+  //       "NDVI": 0.4804017856942116
+  //   },
+  //   {
+  //       "Time": 1617264608338,
+  //       "NDVI": 0.48811391852795977
+  //   }]) 
+
+    const [NdviData, setNdviData] = useState([
+    ['2021-03-01', '2021-04-30', 'Emergence', 'Good'],
+    ['2021-05-01', '2023-08-30', 'Maturity', 'Average'],
+    ['2021-09-01', '2021-10-31', 'Harvest', 'Average'],
+    ['2021-09-01', '2021-10-31', 'Harvest', 'Average'],
+    ['2021-09-01', '2021-10-31', 'Harvest', 'Average']]) 
 
 
     // array of crops 
@@ -73,7 +80,7 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
         //template string
 
         var actualDate = `${Day}-${formatedMonth}-${year}`
-        
+
 
       } else {
         actualDate = "Period Average"
@@ -91,17 +98,33 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
 
   const DateData = (Array) => {
     const tableData = Array.map((item) =>{
-      // console.log(item.Time)
+    //  const test = item.map((data)=>{
+
+        
       if (Object.keys(adm1RsData).length !== 0){
         // NdviData = adm1RsData.time_series
+        // console.log(data)
+
       return (
 
         
         
-        <td>{humanReadableDate(item.Time)}</td>
+       
+         <tr>
+         
+          <td>{item[0]}</td>
+         <td>{item[1]}</td> 
+         <td>{item[2]}</td> 
+         <td>{item[3]}</td>
+         
+       </tr>
+      
         
        
       )} 
+
+  
+      
 
     })
 
@@ -168,7 +191,7 @@ return opt
                {customoptions(Crops)}
       </select>
       <select onChange={cropStageChanges}>
-                <option value={null}>Stage/Period</option>
+                <option value={null}>Image Date</option>
                {customoptions(CropStages)}
       </select>
       </div> 
@@ -181,15 +204,11 @@ return opt
          <th>Stage</th>
          <th>Crop Condition</th>
        </tr>
-       <tr>
+      
          {DateData(NdviData)}
-         {/* <td>Emergence</td>
-         <td>Average</td> */}
-
-         {/* <td>Test</td> */}
-         {/* <td>Test</td> */}
+        
          
-       </tr>
+     
      </table> 
       </div>
       
