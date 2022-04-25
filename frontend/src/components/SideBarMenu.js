@@ -221,7 +221,8 @@ return opt
       <div className='Crop-health'> 
       <select onChange={cropChanges}>
                 <option defaultValue="" hidden>Crop</option>
-               {customoptions(Crops)}
+                {Object.keys(adm1RsData).length !== 0 ? customoptions(Crops) : <></>}
+               
       </select>
        
       <select onChange={ImageDateChanges}>
