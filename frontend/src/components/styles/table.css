@@ -2,6 +2,8 @@
   color: rgb(0, 225, 255);
   border-collapse: collapse;
   width: 100%;
+  overflow: auto;
+  overflow-x: auto;
   /* margin-top: ; */
   margin-bottom: auto;
 }
@@ -35,4 +37,10 @@ th {
   justify-content: center;
   align-items: center;
   height: 350px;
+}
+.spinner-text {
+  text-align: justify;
+  text-decoration-color: aqua;
+  color: rgb(0, 225, 255);
+  /* margin-right: 70%; */
 }

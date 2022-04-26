@@ -24,14 +24,19 @@ export default function Card({adm0Array}) {
   const [showimage, setshowimage] = useState(false)
   const [productSelected, setproductSelected] = useState('')
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [Adm0, setAdm0] = useState(null)
 
   return (
     <Container>
           <Flex>
     <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
-    productSelected={productSelected}/>
+    productSelected={productSelected} Adm0={Adm0}/>
     <StyledCard layout = "column">
       <Form 
+      Adm0= {Adm0}
+      setAdm0={setAdm0}
+
       adm0Array = {adm0Array}
       ADM1Geojson ={ADM1Geojson}
       ADM2Geojson = {ADM2Geojson}
@@ -54,6 +59,7 @@ export default function Card({adm0Array}) {
       productSelected={productSelected}
       setproductSelected={setproductSelected}
       setIsLoading={setIsLoading}
+      setErrorMessage={setErrorMessage}
       
       />
       {/* <MapDeck ADM1Geojson ={ADM1Geojson} 

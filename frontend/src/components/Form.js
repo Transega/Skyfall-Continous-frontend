@@ -33,7 +33,10 @@ const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
 // const rsapiurl = 'http://localhost:8100/RemotesensingApi/get_rsAdmi1/'
 
 
-const Form = ({adm0Array, 
+const Form = ({
+   Adm0,
+   setAdm0,
+   adm0Array, 
    setADM3Geojson, 
    ADM1Geojson, 
    ADM2Geojson,
@@ -52,6 +55,7 @@ const Form = ({adm0Array,
    setMyBoundsAdm3,
    setshowimage,
    setIsLoading,
+   setErrorMessage,
 
 
 }) => {
@@ -89,7 +93,7 @@ const Form = ({adm0Array,
    const { register, handleSubmit } = useForm();
    const [StartDate, setStartDate] = useState('');
    const [EndDate, setEndDate] = useState('');
-   const [Adm0, setAdm0] = useState(null)
+   
    const [Adm1, setAdm1] = useState(null)
    const [Adm2, setAdm2] = useState(null)
    const [Adm3, setAdm3] = useState(null)
@@ -151,7 +155,7 @@ const onAdm1Chnage = (e) => {
    
    const newValue = e.target.value;
    setAdm1(newValue)
-   // console.log(Adm1, 'admi1 selected..')
+   console.log(Adm1, 'admi1 selected..')
   
 //   console.log(ADM1Geojson);
 
@@ -381,7 +385,7 @@ console.log(bbox(Adm1Json));
  const onsubmit = (e) => {
    e.preventDefault()
    // validate selections
-      if (!Adm1 & ! Adm1!=='Adm1'){
+      if (!Adm1 && ! Adm1!=='Adm1'){
          alert('please make Admin level selections')
          return
       }
@@ -419,18 +423,23 @@ console.log(bbox(Adm1Json));
          
          const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&county='+Adm1)
+         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+            setadm1RsData(data)
+            setIsLoading(false)
 
-         console.log('test')
-         //  destructure time series
-         const {time_series} = adm1RsDataFromserver
+         }).catch(()=>{
+            setErrorMessage("Unable to fetch data from Server");
+            alert("Unable to fetch data from Server Please select different dates and Try again")
+            setIsLoading(false)
 
-         const timedata =  time_series.filter((i)=> i.NDVI !== NaN)
-         console.log(timedata)
+
+         })
+
+      
+        
       
 
-         setadm1RsData(adm1RsDataFromserver)
-         setIsLoading(false)
+       
          
          
 
