@@ -156,7 +156,7 @@ const onAdm1Chnage = (e) => {
    
    const newValue = e.target.value;
    setAdm1(newValue)
-   // console.log(Adm1, 'admi1 selected..')
+   console.log(Adm1, 'admi1 selected..')
   
 //   console.log(ADM1Geojson);
 
