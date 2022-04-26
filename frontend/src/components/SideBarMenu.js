@@ -312,9 +312,7 @@ if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter("2021-
     var indexValues = []
     Restructured.push(item.NDVI)
 
-    // var meanIndexvalue = 
-    // console.log(item.Time, 'time')
-    // return Restructured
+   
 
   }
 
@@ -329,9 +327,9 @@ output.map((item)=>{
 //  var indextest = item.index
  var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
  var crop_condition = cropCondition(period,avarage_index)
- console.log(period,crop_condition, 'y', item.date.slice(-1))
+//  console.log(period,crop_condition, 'y', item.date.slice(-1))
 
- var output = [dates[0], dates[1],period,crop_condition]
+ var output = [dates[0], dates[1][0],period,crop_condition]
 
  Restructured.push(output)
 
