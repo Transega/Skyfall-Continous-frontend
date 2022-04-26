@@ -35,13 +35,14 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
 
 
     // array of crops 
-    const [Crops, SetCrops] = useState([])
+    const [Crops, setCrops] = useState([])
     // array of crop stages 
-    const [CropStages, setCropStages] = useState(['Emergence', 'Maturity', 'Harvesting'])
+    // const [CropStages, setCropStages] = useState(['Emergence', 'Maturity', 'Harvesting'])
 
     const [CropSelected, setCropSelected] = useState('')
     const [CropStageSelected, setCropStageSelected] = useState('')
     const [country, setcountry] = useState('Kenya')
+    const [cropCalenderData, setcropCalenderData] = useState({})
 
     const cropCalenderUrl = 'http://208.85.21.253:8080/CropCalenderApi/'
     
@@ -64,15 +65,31 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
       const getCroplist = async () =>{
         const CroplistFromServer = await fetchCropCalendaData(cropCalenderUrl+'getCrops/?country='+country)
         
-        SetCrops(CroplistFromServer['Crops'])
+        setCrops(CroplistFromServer['Crops'])
         
       }
+    
       getCroplist()
 
     
       
    
-     }, [])
+     }, [country])
+
+     useEffect(() => {
+         // get crop calenda json from backend for selected crop
+      if (CropSelected){
+        const getCropCalendaData = async () =>{
+          const CropCalendaFromServer = await fetchCropCalendaData(cropCalenderUrl+'getCrops/?country='+country+'&crop='+CropSelected)
+          
+          setcropCalenderData(CropCalendaFromServer['CropCalendaData'])
+          // console.log('cal', CropSelected,cropCalenderData)
+
+        }
+        getCropCalendaData()
+      }
+
+     }, [CropSelected])
 
   
 
@@ -111,6 +128,31 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
 
         return actualDate
       }
+
+      const humanReadableDateProcesor = (time)=> {
+        // this funtion is specific for Crop health analysis time conversion
+        if (time !=='SeasonNDVI' && time !== 'SeasonNDMI'){
+          var date = new Date(time);
+            
+          var Day = date.getDate().toString().length ==2 ? date.getDate() : `0${date.getDate()}`
+  
+  
+          var year = date.getFullYear()
+          var month = date.getMonth() + 1
+          var formatedMonth = month.toString().length ==2 ? month : `0${month}`
+          // console.log(date, month,Day, 'y', year)
+  
+          
+          //template string
+  
+          // var actualDate = `${Day}-${formatedMonth}-${year}`
+          var actualDate = `${year}-${formatedMonth}-${Day}`
+  
+        } 
+          
+  
+          return actualDate
+        }
 
 
 
@@ -153,14 +195,174 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
     return tableData
 
   }
+// cross check crop calenda data with what is gotten from the computation 
+function Dateconverter(date){
+  const newDate = new Date(date)
+  return newDate
+  }
 
+  function cropCondition(period,ndvi){
+    var condition = ''
+    if (period == 'Emergence'){
+      if (ndvi> 0.1 && ndvi<=0.2){
+        condition = 'Average'
+      }
+      if(ndvi>0.2){
+        condition = 'Good'
+        // console.log(period)
+      }else if (ndvi<0.1){
+        condition = 'Affected'
+      }
+    }
+    if (period == 'Maturity'){
+      if(ndvi> 0.2 && ndvi<0.3){
+        condition = 'Average'
+
+      }
+      if (ndvi< 0.2){
+        condition = 'Affected'
+      }else if (ndvi> 0.3) {
+        condition = 'Good'
+      }
+
+    }
+
+    if (period == 'Harvest'){
+      if (ndvi < 0.2){
+        condition = 'Low Yield'
+      }
+      if (ndvi>=0.2 && ndvi <=0.4){
+        condition = 'Good Yield'
+
+      }else{
+        condition = 'Not Ready'
+      }
+    }
+
+    return condition
+
+  }
+  // var test = cropCondition('Emergence', 0.4)
+  // console.log(test)
+function handleDate(cropCalendaDate, Date){
+  //this function handles the crop calenda dates and dynamically assigns the year to crop calenda
+  var currrentYear = Date.slice(0,4);
+  var cropCalendaMonthDay = cropCalendaDate.slice(4, 10)
+
+  var adjustedCalendaDate = currrentYear+cropCalendaMonthDay
+  console.log(adjustedCalendaDate)
+
+  return adjustedCalendaDate
+
+}
+
+// var test = handleDate(cropCalenderData['Emergence'][0],'2021-03-01')
+// console.log(test)
+function CropCalendaRestructure(calenda, data){
+var Restructured = []
+var Emergence = {'index':[], 'date':[], 'period':'Emergence'}
+var Maturity = {'index':[], 'date':[], 'period':'Maturity'}
+var Harvest = {'index':[], 'date':[], 'period':'Harvest'}
+// console.log(data)
+
+data.map((item)=>{
+
+  // if (item.Time !== 'SeasonNDVI'){
+    if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(humanReadableDateProcesor(item.Time)) 
+    && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-04-30")){
+      // console.log(humanReadableDateProcesor(item.Time))
+
+      Emergence['index'].push(item.NDVI)
+      Emergence['date'].push(humanReadableDateProcesor(item.Time))
+
+      
+     
+
+  
+    
+
+  }
+  if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter( "2021-05-01") && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-08-30")){
+    // console.log(humanReadableDateProcesor(item.Time), 'Mat')
+
+    Maturity['index'].push(item.NDVI)
+    Maturity['date'].push(humanReadableDateProcesor(item.Time))
+
+}
+
+if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter("2021-09-01") && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-10-30")){
+  // console.log(humanReadableDateProcesor(item.Time), 'H')
+
+  Harvest['index'].push(item.NDVI)
+  Harvest['date'].push(humanReadableDateProcesor(item.Time))
+
+  
+ 
+
+
+
+
+}
+
+  
+ 
+
+  if (Dateconverter(humanReadableDate(item.Time)) >= Dateconverter(calenda['Emergence'][0]) && Dateconverter(humanReadableDate(item.Time)) 
+  <= Dateconverter(calenda['Emergence'][1])){
+    var indexValues = []
+    Restructured.push(item.NDVI)
+
+    // var meanIndexvalue = 
+    // console.log(item.Time, 'time')
+    // return Restructured
+
+  }
+
+})
+// console.log(Dateconverter(calenda['Emergence'][0]), 'cal')
+var output = [Emergence, Maturity, Harvest]
+
+output.map((item)=>{
+  if (item.index.length != 0)
+ var period = item.period
+ var dates = [item.date[0], item.date.slice(-1)]
+//  var indextest = item.index
+ var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
+ var crop_condition = cropCondition(period,avarage_index)
+ console.log(period,crop_condition, 'y', item.date.slice(-1))
+
+ var output = [dates[0], dates[1],period,crop_condition]
+
+ Restructured.push(output)
+
+})
+
+return Restructured
+
+}
 
 // Track changes on crop selcetion 
 
 const cropChanges =(e) => {
   let newValue = e.target.value;
   setCropSelected(newValue);
-  // console.log(Adm0, 'adm0..')
+  console.log(CropSelected, 'crop sele')
+  
+  const getCropCalendaData = async () =>{
+    const CropCalendaFromServer = await fetchCropCalendaData(cropCalenderUrl+'getCrops/?country='+country+'&crop='+newValue)
+    
+    setcropCalenderData(CropCalendaFromServer['CropCalendaData'])
+    // console.log('cal', newValue,cropCalenderData, CropCalendaFromServer)
+
+    const testlogic = CropCalendaRestructure(CropCalendaFromServer['CropCalendaData'],adm1RsData.time_series)
+    console.log(testlogic)
+    setNdviData(testlogic)
+
+
+
+
+  }
+  getCropCalendaData()
   
   }
 
@@ -168,8 +370,9 @@ const cropChanges =(e) => {
 
 const ImageDateChanges =(e) => {
   let newValue = e.target.value;
-  console.log(newValue)
+  
   setCropStageSelected(newValue);
+  // console.log(CropStageSelected)
 
   
   
@@ -225,7 +428,7 @@ return opt
                
       </select>
        
-      <select onChange={ImageDateChanges}>
+      <select  onChange={ImageDateChanges}>
                 <option defaultValue="" hidden>Date Image</option>
               {Object.keys(adm1RsData).length !== 0 ? imageoptions(adm1RsData['image_url']) : <></>} 
       </select>
