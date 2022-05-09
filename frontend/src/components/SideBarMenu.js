@@ -234,8 +234,8 @@ function Dateconverter(date){
       if (ndvi>=0.2 && ndvi <=0.4){
         condition = 'Good Yield'
 
-      }else{
-        condition = 'Not Ready'
+      }else {
+        condition = ' Good Yield expected'
       }
     }
 
@@ -245,18 +245,20 @@ function Dateconverter(date){
   // var test = cropCondition('Emergence', 0.4)
   // console.log(test)
 function handleDate(cropCalendaDate, Date){
+
+  console.log(Date,' imput Date')
   //this function handles the crop calenda dates and dynamically assigns the year to crop calenda
   var currrentYear = Date.slice(0,4);
   var cropCalendaMonthDay = cropCalendaDate.slice(4, 10)
 
   var adjustedCalendaDate = currrentYear+cropCalendaMonthDay
-  console.log(adjustedCalendaDate)
+  // console.log(adjustedCalendaDate)
 
   return adjustedCalendaDate
 
 }
 
-// var test = handleDate(cropCalenderData['Emergence'][0],'2021-03-01')
+// var test = handleDate(cropCalenderData['Emergence'][0],'2023-03-01')
 // console.log(test)
 function CropCalendaRestructure(calenda, data){
 var Restructured = []
@@ -268,8 +270,14 @@ var Harvest = {'index':[], 'date':[], 'period':'Harvest'}
 data.map((item)=>{
 
   // if (item.Time !== 'SeasonNDVI'){
-    if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(humanReadableDateProcesor(item.Time)) 
-    && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-04-30")){
+    var date = humanReadableDateProcesor(item.Time)
+    if (date ){
+      console.log(date, 'date')
+    
+    
+    if (Dateconverter(humanReadableDateProcesor(item.Time))  >=   Dateconverter(handleDate(cropCalenderData['Emergence'][0],date))
+      // Dateconverter(humanReadableDateProcesor(item.Time)) 
+    && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(cropCalenderData['Emergence'][1],date))){
       // console.log(humanReadableDateProcesor(item.Time))
 
       Emergence['index'].push(item.NDVI)
@@ -282,7 +290,9 @@ data.map((item)=>{
     
 
   }
-  if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter( "2021-05-01") && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-08-30")){
+  if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handleDate(cropCalenderData['Maturity'][0],date))
+  
+  && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(cropCalenderData['Maturity'][1],date))){
     // console.log(humanReadableDateProcesor(item.Time), 'Mat')
 
     Maturity['index'].push(item.NDVI)
@@ -290,7 +300,8 @@ data.map((item)=>{
 
 }
 
-if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter("2021-09-01") && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter("2021-10-30")){
+if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handleDate(cropCalenderData['Harvest'][0],date)) 
+&& Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(cropCalenderData['Harvest'][1],date))){
   // console.log(humanReadableDateProcesor(item.Time), 'H')
 
   Harvest['index'].push(item.NDVI)
@@ -314,7 +325,7 @@ if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter("2021-
 
    
 
-  }
+  }}
 
 })
 // console.log(Dateconverter(calenda['Emergence'][0]), 'cal')
