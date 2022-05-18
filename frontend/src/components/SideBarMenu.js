@@ -28,9 +28,9 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
   //   }]) 
 
     const [NdviData, setNdviData] = useState([
-    ['2021-03-01', '2021-04-30', 'Emergence', 'Good'],
-    ['2021-05-01', '2023-08-30', 'Maturity', 'Average'],
-    ['2021-09-01', '2021-10-31', 'Harvest', 'Average'],
+    [],
+    [],
+    [],
     ]) 
 
 
