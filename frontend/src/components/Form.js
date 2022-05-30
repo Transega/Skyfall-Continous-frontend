@@ -54,6 +54,8 @@ const Form = ({
    myBoundsAdm3,
    setMyBoundsAdm3,
    setshowimage,
+   productSelected,
+   setproductSelected,
    setIsLoading,
    setErrorMessage,
 
@@ -105,7 +107,7 @@ const Form = ({
 
  const [platformSelected, setplatformSelected] = useState('')
  const [sensorSelected, setsensorSelected] = useState('')
- const [productSelected, setproductSelected] = useState('')
+//  const [productSelected, setproductSelected] = useState('')
 
  // use state for remote sensing data from GEE 
 
