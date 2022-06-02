@@ -188,48 +188,75 @@ function Dateconverter(date){
   return newDate
   }
 
-  function cropCondition(period,ndvi){
+  // Check for water stress for NDMI product 
+  function WaterStress(period,index){
+    var condition = ''
+    
+      if (index< 0 && index< -0){
+        condition = 'Severe Drought'
+      }
+      if (index> 0 && index<0.4){
+        condition = 'Moderate Drought'
+      }
+      if (index> 0.4 && index < 0.8){
+        condition = 'No Water Stress'
+      
+    }
+
+    return condition
+
+  }
+
+  var test1 =  WaterStress('Emegence', 0.1)
+
+  console.log(test1, 'condition test')
+
+  function cropCondition(period,index,Index_name){
+
+    // console.log(Index_name, 'index name ')
+    
     var condition = ''
     if (period == 'Emergence'){
-      if (ndvi> 0.1 && ndvi<=0.2){
+      if (index> 0.1 && index<=0.2){
         condition = 'Average'
       }
-      if(ndvi>0.2){
+      if(index>0.2){
         condition = 'Good'
         // console.log(period)
-      }else if (ndvi<0.1){
+      }else if (index<0.1){
         condition = 'Affected'
       }
     }
     if (period == 'Maturity'){
-      if(ndvi> 0.2 && ndvi<0.3){
+      if(index> 0.2 && index<0.3){
         condition = 'Average'
 
       }
-      if (ndvi< 0.2){
+      if (index< 0.2){
         condition = 'Affected'
-      }else if (ndvi> 0.3) {
+      }else if (index> 0.3) {
         condition = 'Good'
       }
 
     }
 
     if (period == 'Harvest'){
-      if (ndvi < 0.2){
+      if (index>=0.4){
+        condition = 'Not Ready (Good Yield Expected)'
+      }
+      if (index< 0.2){
         condition = 'Low Yield'
       }
-      if (ndvi>=0.2 && ndvi <=0.4){
-        condition = 'Good Yield'
+      if (index>=0.2 && index<=0.4){
 
-      }else {
-        condition = ' Good Yield expected'
-      }
+      } 
+      
     }
 
     return condition
 
   }
-  // var test = cropCondition('Emergence', 0.4)
+  // var test = cropCondition('Emergence', 0.4, 'NDVI')
   // console.log(test)
 function handleDate(cropCalendaDate, Date){
 
@@ -317,7 +344,7 @@ output.map((item)=>{
  var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
 
 
- var crop_condition = cropCondition(period,avarage_index)
+ var crop_condition = cropCondition(period,avarage_index, productSelected)
 
  // test for crop condition each date
  var new_output_array = []
@@ -326,10 +353,13 @@ output.map((item)=>{
    const date = item.date[date_value]
 
   //  console.log('date',date, 'index', index_value)
-   var crop_condition_each_date = cropCondition(period,index_value)
+   var crop_condition_each_date = cropCondition(period,index_value, productSelected)
+   if (productSelected =='NDMI'){
+     crop_condition_each_date = WaterStress(period, index_value)
+   }
    new_output_array = [date, date,period,crop_condition_each_date]
 
-  //  console.log('new',new_output_array)
+   console.log('new',new_output_array,index_value, productSelected)
    Restructured.push(new_output_array)
 
  })
