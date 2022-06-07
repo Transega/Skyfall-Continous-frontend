@@ -58,6 +58,8 @@ const Form = ({
    setproductSelected,
    setIsLoading,
    setErrorMessage,
+   setadm1Imageurls,
+   setIsLoadingMap,
 
 
 }) => {
@@ -415,8 +417,35 @@ console.log(bbox(Adm1Json));
          return
       }
 
+         // This function returns image urls data from the backend 
+         const getImageUrlsData = async () => {
+         setIsLoadingMap(true)
+
+         
+         const adm1RsDataFromserverUrl = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+            
+            setadm1Imageurls(data)
+            setIsLoadingMap(false)
+
+         }).catch(()=>{
+            setErrorMessage("Unable to fetch data from Server");
+            alert("Unable to fetch data from Server Please select different dates and Try again")
+            setIsLoadingMap(false)
+
+
+         })
+
+         setshowimage(true)
+         
+
+
+      }
       
-      // console.log(Adm1,sensorSelected,platformSelected,productSelected)
+      
+         
+         // setshowimage(false)
       const getadm1RsData = async () => {
 
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
@@ -424,27 +453,23 @@ console.log(bbox(Adm1Json));
          setIsLoading(true)
 
          
-         const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         const adm1RsDataFromserverStatistics = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+         '&end_date='+EndDate+'&county='+Adm1+'&statistics=True').then((data)=>{
             setadm1RsData(data)
             setIsLoading(false)
+
+
+
+
 
          }).catch(()=>{
             setErrorMessage("Unable to fetch data from Server");
             alert("Unable to fetch data from Server Please select different dates and Try again")
-            setIsLoading(false)
+            setIsLoadingMap(false)
 
 
          })
-
-      
-        
-      
-
-       
-         
-         
 
          // // Adm 2 RS data
          // const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
@@ -462,13 +487,17 @@ console.log(bbox(Adm1Json));
 
           
          // setadm3RsData(adm3RsDataFromserver)
-         setshowimage(true)
+         // setshowimage(true)
          
 
 
       }
       getadm1RsData()
-      // setshowimage(false)
+      getImageUrlsData()
+      
+
+
+  
 
 
  }
