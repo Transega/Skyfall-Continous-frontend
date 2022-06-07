@@ -15,7 +15,7 @@ import cropSelection from './cropSelection';
 
 
  
-const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, Adm0}) => {
+const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, Adm0,adm1Imageurls}) => {
 
  
 
@@ -479,7 +479,7 @@ return opt
        
       <select  onChange={ImageDateChanges}>
                 <option defaultValue="" hidden>Date Image</option>
-              {Object.keys(adm1RsData).length !== 0 ? imageoptions(adm1RsData['image_url']) : <></>} 
+              {Object.keys(adm1RsData).length !== 0 ? imageoptions(adm1Imageurls['image_url']) : <></>} 
       </select>
       </div> 
       
