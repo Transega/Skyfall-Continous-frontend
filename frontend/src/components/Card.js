@@ -28,12 +28,15 @@ export default function Card({adm0Array}) {
   const [errorMessage, setErrorMessage] = useState("");
   const [Adm0, setAdm0] = useState(null)
 
+  const [adm1Imageurls, setadm1Imageurls] = useState({});
+  const [IsLoadingMap, setIsLoadingMap] = useState(false);
+
   return (
     <Container>
           <Flex>
 
     {isLoading ? <LoadingSpinner2 />: <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
-    productSelected={productSelected} Adm0={Adm0}/>}
+    productSelected={productSelected} Adm0={Adm0} adm1Imageurls={adm1Imageurls}/>}
     
     <StyledCard layout = "column">
       <Form 
@@ -62,23 +65,11 @@ export default function Card({adm0Array}) {
       setproductSelected={setproductSelected}
       setIsLoading={setIsLoading}
       setErrorMessage={setErrorMessage}
+      setadm1Imageurls={setadm1Imageurls}
+      setIsLoadingMap = {setIsLoadingMap}
       
       />
-      {/* <MapDeck ADM1Geojson ={ADM1Geojson} 
-      mapRef ={ mapRef } 
-      ADM2Geojson = {ADM2Geojson} 
-      ADM3Geojson = {ADM3Geojson}
-      
-      imageCoord = {imageCoord}
-      myBoundsAdm3 = {myBoundsAdm3}
-
-      adm1RsData ={adm1RsData}
-      adm2RsData = {adm2RsData}
-      adm3RsData = {adm3RsData}
-      showimage ={showimage}
-      
-      /> */}
-      {isLoading ? <LoadingSpinner /> : <MapDeck ADM1Geojson ={ADM1Geojson} 
+      {IsLoadingMap ? <LoadingSpinner /> : <MapDeck ADM1Geojson ={ADM1Geojson} 
       mapRef ={ mapRef } 
       ADM2Geojson = {ADM2Geojson} 
       ADM3Geojson = {ADM3Geojson}
@@ -91,10 +82,10 @@ export default function Card({adm0Array}) {
       adm3RsData = {adm3RsData}
       showimage ={showimage}
       isLoading={isLoading}
+      adm1Imageurls={adm1Imageurls}
 
       
       />}
-      {/* <LoadingSpinner/> */}
       
     </StyledCard>
     </Flex>
