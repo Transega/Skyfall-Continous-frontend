@@ -10,7 +10,7 @@ mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worke
 const MAPBOX_TOKEN = "pk.eyJ1Ijoia29yeWtvcmlyMTIzIiwiYSI6ImNsMGdqcjdybTEzcTczanBybHU5anN6bnUifQ.rIUBT4fmSIwMuwN_vtUznw"
 
 
-function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsData,adm3RsData,showimage,isLoading}){
+function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsData,adm3RsData,showimage,isLoading,adm1Imageurls}){
 
  
 
@@ -36,13 +36,13 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsD
       
       
       if (showimage === true) {
-        console.log(adm1RsData.image_url, 'rsdata')
+        console.log(adm1Imageurls.image_url, 'rsdata')
       return (
 
         <Source
         id ="wms_source"
         type = "raster"
-        tiles ={[adm1RsData.image_url[0]['imageurl']
+        tiles ={[adm1Imageurls.image_url[0]['imageurl']
         ]}
         tileSize ={256}>
           <Layer 
