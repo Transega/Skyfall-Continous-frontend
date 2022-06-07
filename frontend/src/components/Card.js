@@ -7,6 +7,8 @@ import { Flex } from './styles/Flex.styled'
 import react,{useState,useRef } from 'react'
 import LoadingSpinner from './Spinner'
 
+import LoadingSpinner2 from './spiner2'
+
 export default function Card({adm0Array}) {
 
 
@@ -29,8 +31,10 @@ export default function Card({adm0Array}) {
   return (
     <Container>
           <Flex>
-    <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
-    productSelected={productSelected} Adm0={Adm0}/>
+
+    {isLoading ? <LoadingSpinner2 />: <SideBarMenu ADM1Geojson ={ADM1Geojson} adm1RsData= {adm1RsData} mapRef={mapRef} showimage = {showimage}  
+    productSelected={productSelected} Adm0={Adm0}/>}
+    
     <StyledCard layout = "column">
       <Form 
       Adm0= {Adm0}
