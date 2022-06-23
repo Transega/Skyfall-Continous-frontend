@@ -54,8 +54,13 @@ const Form = ({
    myBoundsAdm3,
    setMyBoundsAdm3,
    setshowimage,
+   productSelected,
+   setproductSelected,
    setIsLoading,
    setErrorMessage,
+   setadm1Imageurls,
+   setIsLoadingMap,
+   setViewState,
 
 
 }) => {
@@ -105,7 +110,7 @@ const Form = ({
 
  const [platformSelected, setplatformSelected] = useState('')
  const [sensorSelected, setsensorSelected] = useState('')
- const [productSelected, setproductSelected] = useState('')
+//  const [productSelected, setproductSelected] = useState('')
 
  // use state for remote sensing data from GEE 
 
@@ -310,6 +315,18 @@ useEffect(()=> {
    setadm1Array(Adm1fromsever['counties'])
    // get shapefile  json from server 
    const Adm1Json = await fetchJson(adm1geoJsonurl+Adm1)
+
+     const coordinates = Adm1Json.features[0].geometry.coordinates;
+// console.log('selected', coordinates[0][0][0])
+
+var Cordinates = coordinates[0][0][0]
+
+   setViewState({
+      longitude: Cordinates[0],
+    latitude: Cordinates[1],
+    zoom: 8
+
+   })
       
    setADM1Geojson(Adm1Json)
 
@@ -412,8 +429,35 @@ console.log(bbox(Adm1Json));
          return
       }
 
+         // This function returns image urls data from the backend 
+         const getImageUrlsData = async () => {
+         setIsLoadingMap(true)
+
+         
+         const adm1RsDataFromserverUrl = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
+         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+            
+            setadm1Imageurls(data)
+            setIsLoadingMap(false)
+
+         }).catch(()=>{
+            setErrorMessage("Unable to fetch data from Server");
+            alert("Unable to fetch data from Server Please select different dates and Try again")
+            setIsLoadingMap(false)
+
+
+         })
+
+         setshowimage(true)
+         
+
+
+      }
       
-      // console.log(Adm1,sensorSelected,platformSelected,productSelected)
+      
+         
+         // setshowimage(false)
       const getadm1RsData = async () => {
 
          // 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/'
@@ -421,27 +465,23 @@ console.log(bbox(Adm1Json));
          setIsLoading(true)
 
          
-         const adm1RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
+         const adm1RsDataFromserverStatistics = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
          +'&sensor='+sensorSelected+'&product='+productSelected+'&start_date='+StartDate+
-         '&end_date='+EndDate+'&county='+Adm1).then((data)=>{
+         '&end_date='+EndDate+'&county='+Adm1+'&statistics=True').then((data)=>{
             setadm1RsData(data)
             setIsLoading(false)
+
+
+
+
 
          }).catch(()=>{
             setErrorMessage("Unable to fetch data from Server");
             alert("Unable to fetch data from Server Please select different dates and Try again")
-            setIsLoading(false)
+            setIsLoadingMap(false)
 
 
          })
-
-      
-        
-      
-
-       
-         
-         
 
          // // Adm 2 RS data
          // const adm2RsDataFromserver = await fetchRemoteSensingData(rsapiurl+'?platform='+platformSelected
@@ -459,7 +499,7 @@ console.log(bbox(Adm1Json));
 
           
          // setadm3RsData(adm3RsDataFromserver)
-         setshowimage(true)
+         // setshowimage(true)
          
 
         
@@ -468,7 +508,11 @@ console.log(bbox(Adm1Json));
 
       }
       getadm1RsData()
-      // setshowimage(false)
+      getImageUrlsData()
+      
+
+
+  
 
 
  }
