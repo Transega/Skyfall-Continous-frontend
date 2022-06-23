@@ -15,7 +15,7 @@ import cropSelection from './cropSelection';
 
 
  
-const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, Adm0,adm1Imageurls}) => {
+const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected, Adm0,adm1Imageurls,setSelectedImage, setIsLoadingMap}) => {
 
  
 
@@ -69,14 +69,17 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
         const getCropCalendaData = async () =>{
           const CropCalendaFromServer = await fetchCropCalendaData(cropCalenderUrl+'getCrops/?country='+country+'&crop='+CropSelected)
           
-          // setcropCalenderData(CropCalendaFromServer['CropCalendaData'])
+          setcropCalenderData(CropCalendaFromServer['CropCalendaData'])
+          const testlogic = CropCalendaRestructure(CropCalendaFromServer['CropCalendaData'],adm1RsData.time_series)
+    
+          setINdexData(testlogic)
           // console.log('cal', cropCalenderData, CropCalendaFromServer)
 
         }
         getCropCalendaData()
       }
 
-     }, [CropSelected])
+     }, [CropSelected,adm1RsData])
 
   
 
@@ -163,6 +166,7 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
          {/* <td>{item[1]}</td>  */}
          <td>{item[2]}</td> 
          <td>{item[3]}</td>
+         <td>{item[4]}</td>
          
        </tr>
       
@@ -276,9 +280,9 @@ function handleDate(cropCalendaDate, Date){
 // console.log(test)
 function CropCalendaRestructure(calenda, data){
 var Restructured = []
-var Emergence = {'index':[], 'date':[], 'period':'Emergence'}
-var Maturity = {'index':[], 'date':[], 'period':'Maturity'}
-var Harvest = {'index':[], 'date':[], 'period':'Harvest'}
+var Emergence = {'index':[], 'date':[], 'period':'Emergence', 'Area':[]}
+var Maturity = {'index':[], 'date':[], 'period':'Maturity', 'Area':[]}
+var Harvest = {'index':[], 'date':[], 'period':'Harvest', 'Area':[]}
 // console.log(data)
 
 data.map((item)=>{
@@ -295,15 +299,11 @@ data.map((item)=>{
       
     && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(calenda['Emergence'][1],date))){
       // console.log(productSelected)
-
-      Emergence['index'].push(item[productSelected])
-      Emergence['date'].push(humanReadableDateProcesor(item.Time))
-
       
-     
-
-  
-    
+      Emergence['index'].push(item[productSelected])
+      Emergence['Area'].push(item['Area_Ha'])
+      Emergence['date'].push(humanReadableDateProcesor(item.Time))
+        
 
   }
   if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handleDate(calenda['Maturity'][0],date))
@@ -312,6 +312,7 @@ data.map((item)=>{
     // console.log(humanReadableDateProcesor(item.Time), 'Mat')
 
     Maturity['index'].push(item[productSelected])
+    Maturity['Area'].push(item['Area_Ha'])
     Maturity['date'].push(humanReadableDateProcesor(item.Time))
 
 }
@@ -321,12 +322,8 @@ if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handle
   // console.log(humanReadableDateProcesor(item.Time), 'H')
 
   Harvest['index'].push(item[productSelected])
+  Harvest['Area'].push(item['Area_Ha'])
   Harvest['date'].push(humanReadableDateProcesor(item.Time))
-
-  
- 
-
-
 
 
 }
@@ -341,6 +338,7 @@ output.map((item)=>{
  var period = item.period
  var dates = [item.date[0], item.date.slice(-1)]
 //  var indextest = item.index
+// avarage value per period
  var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
 
 
@@ -351,13 +349,15 @@ output.map((item)=>{
 
  item.index.forEach((index_value,date_value)=>{
    const date = item.date[date_value]
+   const area_ha = item['Area'][date_value]
+   console.log(date_value,'date test', area_ha, 'area')
 
   //  console.log('date',date, 'index', index_value)
    var crop_condition_each_date = cropCondition(period,index_value, productSelected)
    if (productSelected =='NDMI'){
      crop_condition_each_date = WaterStress(period, index_value)
    }
-   new_output_array = [date, date,period,crop_condition_each_date]
+   new_output_array = [date, date,period,crop_condition_each_date,area_ha]
 
    console.log('new',new_output_array,index_value, productSelected)
    Restructured.push(new_output_array)
@@ -415,13 +415,24 @@ const cropChanges =(e) => {
   
   }
 
-  // Track changes on stage selcetion 
+  // Track image changes 
+  const set_loading = () =>{
+    setIsLoadingMap(false);
+
+  }
 
 const ImageDateChanges =(e) => {
   let newValue = e.target.value;
+  setIsLoadingMap(true);
+
+  setSelectedImage(newValue);
+
+  setTimeout( function() { set_loading(); }, 1000);
   
-  setCropStageSelected(newValue);
-  // console.log(CropStageSelected)
+  
+  
+
+  // console.log(newValue,'selected Image')
 
   
   
@@ -491,6 +502,7 @@ return opt
          {/* <th>EndDate</th> */}
          <th>Stage</th>
          <th>Crop Condition</th>
+         <th>Area Ha</th>
        </tr>
       
          {DateData(INdexData)}

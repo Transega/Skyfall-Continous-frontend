@@ -13,7 +13,7 @@ export default function LoadingSpinner2() {
       
       
     </div>
-    <h3 className="spinner-text2">Please Wait this can take longer</h3>
+    <h3 className="spinner-text2">Loading Statistcs Please Wait this can take longer</h3>
     </div>
   );
 }

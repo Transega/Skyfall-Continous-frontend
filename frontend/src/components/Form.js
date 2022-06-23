@@ -60,6 +60,7 @@ const Form = ({
    setErrorMessage,
    setadm1Imageurls,
    setIsLoadingMap,
+   setViewState,
 
 
 }) => {
@@ -315,6 +316,18 @@ useEffect(()=> {
    setadm1Array(Adm1fromsever['counties'])
    // get shapefile  json from server 
    const Adm1Json = await fetchJson(adm1geoJsonurl+Adm1)
+
+     const coordinates = Adm1Json.features[0].geometry.coordinates;
+// console.log('selected', coordinates[0][0][0])
+
+var Cordinates = coordinates[0][0][0]
+
+   setViewState({
+      longitude: Cordinates[0],
+    latitude: Cordinates[1],
+    zoom: 8
+
+   })
       
    setADM1Geojson(Adm1Json)
 
