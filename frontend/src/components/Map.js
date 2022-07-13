@@ -16,7 +16,7 @@ function MapDeck({ADM1Geojson,ADM2Geojson,ADM3Geojson,mapRef, adm1RsData,adm2RsD
   const [viewState1, setViewState1] = useState({
     longitude: 36.543,
     latitude: 0.453,
-    zoom: 6
+    zoom: 7
 })
 
 if (isLoading){
