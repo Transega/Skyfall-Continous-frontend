@@ -36,7 +36,7 @@ const SideBarMenu = ({ADM1Geojson, adm1RsData,mapRef, showimage,productSelected,
     const [country, setcountry] = useState('Kenya')
     const [cropCalenderData, setcropCalenderData] = useState({})
 
-    const cropCalenderUrl = 'http://208.85.21.253:8080/CropCalenderApi/'
+    const cropCalenderUrl = 'http://208.85.21.253:8100/CropCalenderApi/'
     
 
    
@@ -213,7 +213,7 @@ function Dateconverter(date){
 
   var test1 =  WaterStress('Emegence', 0.1)
 
-  console.log(test1, 'condition test')
+  // console.log(test1, 'condition test')
 
   function cropCondition(period,index,Index_name){
 
@@ -279,6 +279,7 @@ function handleDate(cropCalendaDate, Date){
 // var test = handleDate(cropCalenderData['Emergence'][0],'2023-03-01')
 // console.log(test)
 function CropCalendaRestructure(calenda, data){
+  // this function restructures index data groups it to different periods of vegetation growth
 var Restructured = []
 var Emergence = {'index':[], 'date':[], 'period':'Emergence', 'Area':[]}
 var Maturity = {'index':[], 'date':[], 'period':'Maturity', 'Area':[]}
