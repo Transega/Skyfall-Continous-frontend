@@ -19,7 +19,7 @@ import axios from 'axios';
 
 // import React from 'react'
 //  urls 
-const baseurlshp = 'http://208.85.21.253:8080/AdminData'
+const baseurlshp = 'http://208.85.21.253:8100/AdminData'
 const adm2Namesurl = baseurlshp+'/get_adm2_shapefile/?Get_sub_counties_names='
 const adm3Namesurl = baseurlshp+'/get_adm3_shapefile/?Get_wards_in_sub_county='
 // urls for geojson data 
@@ -29,7 +29,7 @@ const adm3geoJsonurl = baseurlshp+'/get_adm3_shapefile/?GetWardGeojson='
 
 // url for remote sensing data  http://localhost:8100
 
-const rsapiurl = 'http://208.85.21.253:8080/RemotesensingApi/get_rsAdmi1/' 
+const rsapiurl = 'http://208.85.21.253:8100/RemotesensingApi/get_rsAdmi1/' 
 // const rsapiurl = 'http://localhost:8100/RemotesensingApi/get_rsAdmi1/'
 
 
