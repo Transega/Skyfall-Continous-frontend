@@ -350,7 +350,7 @@ console.log(bbox(Adm1Json));
     setshowimage(false)
     
 
-  }, [Adm1])
+  }, [Adm1,Adm0])
 
   
   // use effect to fetch other datasets from server 
@@ -360,7 +360,7 @@ console.log(bbox(Adm1Json));
 // Fetch Counties
       
   const fetchAdm1 = async () => {
-   const res = await fetch(baseurlshp+'/get_adm1_shapefile/?county_names=ALL')
+   const res = await fetch(baseurlshp+'/get_adm1_shapefile/?county_names=ALL&country_name='+Adm0)
    const data = await res.json()
    return data  
  }
