@@ -84,7 +84,7 @@ const [Image_on_Map, setImage_on_Map] = useState([])
         return url
         
       }
-      setTimeout( function() { change_url_link(adm1Imageurls.image_url[0]['imageurl']); }, 1000);
+      setTimeout( function() { change_url_link(adm1Imageurls.image_url[0]['imageurl']); }, 10000);
 
       if (SelectedImage){
         // setIsLoadingMap(false)
