@@ -327,10 +327,10 @@ output.map((item)=>{
 // avarage value per period
  var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
 
-// evaluate crop condition for the mean of each stage 
+// evaluate crop condition for the mean of each stage
  var crop_condition = cropCondition(period,avarage_index, productSelected)
 
- //  crop condition each date as requested by user 
+ // test for crop condition each date
  var new_output_array = []
 
  item.index.forEach((index_value,date_value)=>{
@@ -343,7 +343,7 @@ output.map((item)=>{
    }
    new_output_array = [date, date,period,crop_condition_each_date,area_ha]
 
-  //  console.log('new',new_output_array,index_value, productSelected)
+   console.log('new',new_output_array,index_value, productSelected)
    Restructured.push(new_output_array)
 
  })
@@ -474,7 +474,7 @@ return opt
        
       <select  onChange={ImageDateChanges}>
                 <option defaultValue="" hidden>Date Image</option>
-              {Object.keys(adm1RsData).length !== 0 ? imageoptions(adm1Imageurls['image_url']) : <></>} 
+              {Object.keys(adm1Imageurls).length !== 0 ? imageoptions(adm1Imageurls['image_url']) : <></>} 
       </select>
       </div> 
       
