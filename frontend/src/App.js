@@ -18,7 +18,7 @@ const theme = {
 }
 
 function App() {
-  const [adm0Array,setadm0Array] = useState(["Kenya", "Uganda", "Zambia"])
+  const [adm0Array,setadm0Array] = useState(["Kenya", "Zambia"])
   return (
     <ThemeProvider theme={theme}>
       <>

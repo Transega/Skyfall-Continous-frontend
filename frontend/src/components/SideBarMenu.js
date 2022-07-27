@@ -264,7 +264,6 @@ function Dateconverter(date){
   // console.log(test)
 function handleDate(cropCalendaDate, Date){
 
-  // console.log(cropCalendaDate,' imput Date')
   //this function handles the crop calenda dates and dynamically assigns the year to crop calenda
   var currrentYear = Date.slice(0,4);
   var cropCalendaMonthDay = cropCalendaDate.slice(4, 10)
@@ -275,31 +274,21 @@ function handleDate(cropCalendaDate, Date){
   return adjustedCalendaDate
 
 }
-
-// var test = handleDate(cropCalenderData['Emergence'][0],'2023-03-01')
-// console.log(test)
 function CropCalendaRestructure(calenda, data){
   // this function restructures index data groups it to different periods of vegetation growth
 var Restructured = []
 var Emergence = {'index':[], 'date':[], 'period':'Emergence', 'Area':[]}
 var Maturity = {'index':[], 'date':[], 'period':'Maturity', 'Area':[]}
 var Harvest = {'index':[], 'date':[], 'period':'Harvest', 'Area':[]}
-// console.log(data)
 
 data.map((item)=>{
 
-  // if (item.Time !== 'SeasonNDVI'){
     var date = humanReadableDateProcesor(item.Time)
     if (date ){
-      // console.log(date, 'date')
-      // console.log(cropCalenderData, 'crop calenda data')
-    
     
     if (Dateconverter(humanReadableDateProcesor(item.Time))  >=   Dateconverter(handleDate(calenda['Emergence'][0],date))
-      // Dateconverter(humanReadableDateProcesor(item.Time)) 
       
     && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(calenda['Emergence'][1],date))){
-      // console.log(productSelected)
       
       Emergence['index'].push(item[productSelected])
       Emergence['Area'].push(item['Area_Ha'])
@@ -310,22 +299,18 @@ data.map((item)=>{
   if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handleDate(calenda['Maturity'][0],date))
   
   && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(calenda['Maturity'][1],date))){
-    // console.log(humanReadableDateProcesor(item.Time), 'Mat')
 
     Maturity['index'].push(item[productSelected])
     Maturity['Area'].push(item['Area_Ha'])
     Maturity['date'].push(humanReadableDateProcesor(item.Time))
-
 }
 
 if (Dateconverter(humanReadableDateProcesor(item.Time))  >= Dateconverter(handleDate(calenda['Harvest'][0],date)) 
 && Dateconverter(humanReadableDateProcesor(item.Time)) <= Dateconverter(handleDate(calenda['Harvest'][1],date))){
-  // console.log(humanReadableDateProcesor(item.Time), 'H')
 
   Harvest['index'].push(item[productSelected])
   Harvest['Area'].push(item['Area_Ha'])
   Harvest['date'].push(humanReadableDateProcesor(item.Time))
-
 
 }
 }
@@ -338,29 +323,27 @@ output.map((item)=>{
   if (item.index.length != 0)
  var period = item.period
  var dates = [item.date[0], item.date.slice(-1)]
-//  var indextest = item.index
+
 // avarage value per period
  var avarage_index = item.index.reduce((a, b) => a + b, 0) / item.index.length
 
-
+// evaluate crop condition for the mean of each stage 
  var crop_condition = cropCondition(period,avarage_index, productSelected)
 
- // test for crop condition each date
+ //  crop condition each date as requested by user 
  var new_output_array = []
 
  item.index.forEach((index_value,date_value)=>{
    const date = item.date[date_value]
-   const area_ha = item['Area'][date_value]
-   console.log(date_value,'date test', area_ha, 'area')
-
-  //  console.log('date',date, 'index', index_value)
+   const area_ha = item['Area_Ha'][date_value]
+ 
    var crop_condition_each_date = cropCondition(period,index_value, productSelected)
    if (productSelected =='NDMI'){
      crop_condition_each_date = WaterStress(period, index_value)
    }
    new_output_array = [date, date,period,crop_condition_each_date,area_ha]
 
-   console.log('new',new_output_array,index_value, productSelected)
+  //  console.log('new',new_output_array,index_value, productSelected)
    Restructured.push(new_output_array)
 
  })
