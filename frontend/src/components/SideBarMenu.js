@@ -335,7 +335,7 @@ output.map((item)=>{
 
  item.index.forEach((index_value,date_value)=>{
    const date = item.date[date_value]
-   const area_ha = item['Area_Ha'][date_value]
+   const area_ha = item['Area'][date_value]
  
    var crop_condition_each_date = cropCondition(period,index_value, productSelected)
    if (productSelected =='NDMI'){
